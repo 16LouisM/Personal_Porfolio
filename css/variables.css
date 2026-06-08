@@ -6,7 +6,7 @@
     --background-color: #ffffff;
     --surface-color: #f8fafc;
 
-    --text-color: #0f172a;
+    --text-color: #222222;
     --text-secondary: #64748b;
 
     --border-color: #e2e8f0;
@@ -14,4 +14,9 @@
     --container-width: 1200px;
 
     --transition: 0.3s ease;
+}
+
+[data-theme="dark"] {
+    --background-color: #121212;
+    --text-color: #ffffff;
 }

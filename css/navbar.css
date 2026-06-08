@@ -1,23 +1,45 @@
-/* =========================
-   Theme Variables
-========================= */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
 
-:root {
-    --bg-color: #ffffff;
-    --text-color: #222222;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 20px 10%;
+
+    background: rgba(18, 18, 18, 0.95);
+
+    z-index: 1000;
 }
 
-[data-theme="dark"] {
-    --bg-color: #121212;
-    --text-color: #ffffff;
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
 }
 
-/* =========================
-   Global Styles
-========================= */
+.nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+}
 
-body {
-    background: var(--bg-color);
-    color: var(--text-color);
-    transition: background 0.3s ease, color 0.3s ease;
+.nav-links a {
+    color: white;
+    text-decoration: none;
+}
+
+.nav-links a:hover {
+    color: #00bcd4;
+}
+
+.theme-toggle {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 1.2rem;
 }
