@@ -5,10 +5,13 @@ export async function loadNavbar() {
 
     document.getElementById("navbar-container").innerHTML = html;
 
-    // Elements
-    const menuToggle = document.getElementById("menu-toggle");
+    const navbar = document.getElementById("navbar");
     const navLinks = document.getElementById("nav-links");
-    const navbar = document.querySelector(".navbar");
+    const menuToggle = document.getElementById("menu-toggle");
+    const underline = document.getElementById("nav-underline");
+    const progress = document.getElementById("scroll-progress");
+
+    let lastScrollY = window.scrollY;
 
     // =========================
     // Mobile menu toggle
@@ -17,37 +20,89 @@ export async function loadNavbar() {
         navLinks.classList.toggle("active");
     });
 
-    // Close menu on link click
-    document.querySelectorAll(".nav-links a").forEach(link => {
-        link.addEventListener("click", () => {
+    // =========================
+    // Click outside to close
+    // =========================
+    document.addEventListener("click", (e) => {
+        if (
+            !navLinks.contains(e.target) &&
+            !menuToggle.contains(e.target)
+        ) {
             navLinks.classList.remove("active");
+        }
+    });
+
+    // =========================
+    // ESC key close
+    // =========================
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+            navLinks.classList.remove("active");
+        }
+    });
+
+    // =========================
+    // Scroll hide/show navbar
+    // =========================
+    window.addEventListener("scroll", () => {
+
+        // hide/show navbar
+        if (window.scrollY > lastScrollY) {
+            navbar.classList.add("hidden"); // scrolling down
+        } else {
+            navbar.classList.remove("hidden"); // scrolling up
+        }
+
+        lastScrollY = window.scrollY;
+
+        // scroll progress bar
+        const scrollTop = window.scrollY;
+        const docHeight = document.body.scrollHeight - window.innerHeight;
+        const progressWidth = (scrollTop / docHeight) * 100;
+
+        progress.style.width = progressWidth + "%";
+    });
+
+    // =========================
+    // Active link + animated underline
+    // =========================
+    const links = document.querySelectorAll(".nav-links a");
+
+    links.forEach(link => {
+
+        link.addEventListener("mouseenter", (e) => {
+            moveUnderline(e.target);
+        });
+
+        link.addEventListener("click", (e) => {
+            links.forEach(l => l.classList.remove("active"));
+            e.target.classList.add("active");
+            moveUnderline(e.target);
         });
     });
 
-    // Close menu on ESC
-    document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") {
-            navLinks?.classList.remove("active");
-        }
-    });
+    function moveUnderline(element) {
+
+        if (window.innerWidth <= 768) return;
+        
+        const rect = element.getBoundingClientRect();
+        const parentRect = element.parentElement.parentElement.getBoundingClientRect();
+
+        underline.style.width = rect.width + "px";
+        underline.style.left = (rect.left - parentRect.left) + "px";
+    }
+
+    // default underline position
+    const active = document.querySelector(".nav-links a.active");
+    if (active) moveUnderline(active);
 
     // =========================
-    // Scroll effect
-    // =========================
-    window.addEventListener("scroll", () => {
-        if (window.scrollY > 50) {
-            navbar?.classList.add("scrolled");
-        } else {
-            navbar?.classList.remove("scrolled");
-        }
-    });
-
-    // =========================
-    // Active section highlight (scroll spy)
+    // Scroll spy (section tracking)
     // =========================
     const sections = document.querySelectorAll("section");
 
     const observer = new IntersectionObserver((entries) => {
+
         entries.forEach(entry => {
 
             const id = entry.target.getAttribute("id");
@@ -55,10 +110,10 @@ export async function loadNavbar() {
 
             if (entry.isIntersecting) {
 
-                document.querySelectorAll(".nav-links a")
-                    .forEach(a => a.classList.remove("active"));
-
+                links.forEach(l => l.classList.remove("active"));
                 link?.classList.add("active");
+
+                if (link) moveUnderline(link);
             }
         });
 

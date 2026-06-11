@@ -1,45 +1,43 @@
-<nav class="navbar container">
+<nav class="navbar" id="navbar">
 
     <!-- Logo -->
     <div class="logo">
         <a href="#home">Louis.dev</a>
     </div>
 
-    <!-- Navigation Links -->
-    <ul class="nav-links" id="nav-links">
+    <!-- Navigation wrapper -->
+    <div class="nav-center">
 
-        <li><a href="#home" class="active">Home</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#skills">Skills</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#certificates">Certificates</a></li>
-        <li><a href="#contact">Contact</a></li>
+        <ul class="nav-links" id="nav-links">
 
-    </ul>
+            <li><a href="#home" class="active">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#certificates">Certificates</a></li>
+            <li><a href="#contact">Contact</a></li>
+
+        </ul>
+
+        <!-- underline MUST be outside UL -->
+        <span class="nav-underline" id="nav-underline"></span>
+
+    </div>
 
     <!-- Actions -->
     <div class="nav-actions">
 
-        <!-- Theme Toggle -->
-        <button
-            id="theme-toggle"
-            class="theme-toggle"
-            aria-label="Toggle dark mode">
-
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
             <i class="fa-solid fa-moon"></i>
-
         </button>
 
-        <!-- Mobile Menu Button -->
-        <button
-            id="menu-toggle"
-            class="menu-toggle"
-            aria-label="Open navigation menu">
-
+        <button id="menu-toggle" class="menu-toggle" aria-label="Open menu">
             <i class="fa-solid fa-bars"></i>
-
         </button>
 
     </div>
 
 </nav>
+
+<!-- Scroll progress bar -->
+<div class="scroll-progress" id="scroll-progress"></div>
