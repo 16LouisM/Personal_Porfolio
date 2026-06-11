@@ -22,9 +22,6 @@ export async function loadProfile() {
         document.getElementById("profile-name").textContent =
             profile.fullName || "Mashele Louis";
 
-        document.getElementById("profile-title").textContent =
-            profile.title || "Information Technology Graduate";
-
         document.getElementById("profile-description").textContent =
             profile.about || "";
 

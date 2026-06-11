@@ -120,3 +120,32 @@
         height: 250px;
     }
 }
+
+.typing-container {
+    min-height: 60px;
+    color: #e5e7eb;
+    margin-bottom: 1.5rem;
+}
+
+#typing-text {
+    color: #00bcd4;
+}
+
+.cursor {
+    color: #00bcd4;
+    animation: blink 0.8s infinite;
+}
+
+@keyframes blink {
+
+    0%,
+    50% {
+        opacity: 1;
+    }
+
+    51%,
+    100% {
+        opacity: 0;
+    }
+
+}
