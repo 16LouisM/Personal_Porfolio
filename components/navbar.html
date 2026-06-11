@@ -5,10 +5,10 @@
         <a href="#home">Louis.dev</a>
     </div>
 
-    <!-- Menu -->
-    <ul class="nav-links">
+    <!-- Navigation Links -->
+    <ul class="nav-links" id="nav-links">
 
-        <li><a href="#home">Home</a></li>
+        <li><a href="#home" class="active">Home</a></li>
         <li><a href="#about">About</a></li>
         <li><a href="#skills">Skills</a></li>
         <li><a href="#projects">Projects</a></li>
@@ -17,11 +17,27 @@
 
     </ul>
 
-    <!-- Theme Toggle -->
+    <!-- Actions -->
     <div class="nav-actions">
 
-        <button id="theme-toggle" class="theme-toggle">
+        <!-- Theme Toggle -->
+        <button
+            id="theme-toggle"
+            class="theme-toggle"
+            aria-label="Toggle dark mode">
+
             <i class="fa-solid fa-moon"></i>
+
+        </button>
+
+        <!-- Mobile Menu Button -->
+        <button
+            id="menu-toggle"
+            class="menu-toggle"
+            aria-label="Open navigation menu">
+
+            <i class="fa-solid fa-bars"></i>
+
         </button>
 
     </div>
