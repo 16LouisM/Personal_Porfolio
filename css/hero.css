@@ -40,7 +40,7 @@
 }
 
 .hero-text p {
-    max-width: 600px;
+    max-width: 550px;
     font-size: 1.1rem;
     margin-bottom: 2rem;
     color: #9ca3af;
@@ -84,8 +84,8 @@
 }
 
 .hero-image img {
-    width: 350px;
-    height: 350px;
+    width: 420px;
+    height: 420px;
     border-radius: 50%;
     object-fit: cover;
     border: 5px solid #00bcd4;
