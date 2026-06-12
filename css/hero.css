@@ -109,8 +109,8 @@
 
     position: absolute;
 
-    width: 432px;
-    height: 432px;
+    width: 355px;
+    height: 355px;
 
     border-radius: 50%;
 
@@ -136,10 +136,10 @@
 
     position: absolute;
 
-    width: 426px;
-    height: 426px;
+    width: 418px;
+    height: 418px;
 
-    border-radius: 50%;
+    border-radius: 100%;
 
     background: var(--bg-color);
 
@@ -149,8 +149,8 @@
 /* Profile Image */
 
 .hero-image img {
-    width: 420px;
-    height: 420px;
+    width: 418px;
+    height: 418px;
 
     border-radius: 50%;
     object-fit: cover;
@@ -230,7 +230,7 @@
    Tablet
 ========================= */
 
-@media (max-width: 992px) {
+@media (max-width: 1024px) {
 
     .hero-content {
         flex-direction: column;
@@ -239,15 +239,30 @@
     }
 
     .hero-image {
-        order: -1;
+        order: 1;
     }
 
     .hero-text {
-        order: 1;
+        order: -1;
     }
 
     .hero-buttons {
         justify-content: center;
+    }
+
+    .hero-image img {
+        width: 250px;
+        height: 250px;
+    }
+
+    .hero-image::before {
+        width: 325px;
+        height: 325px;
+    }
+
+    .hero-image::after {
+        width: 256px;
+        height: 256px;
     }
 
     .hero-text p {
@@ -273,7 +288,58 @@
     }
 
     .hero-image {
+        order: 1;
+        margin-bottom: 2rem;
+    }
+
+    .hero-text {
         order: -1;
+    }
+
+    .hero-text h1 {
+        font-size: 3rem;
+    }
+
+    .hero-text h2 {
+        font-size: 1.5rem;
+    }
+
+    .hero-buttons {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .hero-image img {
+        width: 250px;
+        height: 250px;
+    }
+
+    .hero-image::before {
+        width: 285px;
+        height: 285px;
+    }
+
+    .hero-image::after {
+        width: 256px;
+        height: 256px;
+    }
+}
+
+@media (max-width: 425px) {
+
+    .hero-section {
+        padding-top: 180px;
+    }
+
+    .hero-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 2rem;
+    }
+
+    .hero-image {
+        order: -1;
+        margin-bottom: 2rem;
     }
 
     .hero-text {
@@ -299,8 +365,8 @@
     }
 
     .hero-image::before {
-        width: 262px;
-        height: 262px;
+        width: 205px;
+        height: 205px;
     }
 
     .hero-image::after {
