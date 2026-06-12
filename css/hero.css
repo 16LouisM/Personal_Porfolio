@@ -5,8 +5,8 @@
 .hero-section {
     min-height: 100vh;
     display: flex;
-    align-items: center;
-    padding-top: 80px;
+    align-items: flex-start;
+    padding-top: 140px;
 }
 
 .hero-content {
@@ -49,13 +49,14 @@
 .hero-buttons {
     display: flex;
     gap: 1rem;
+    flex-wrap: wrap;
 }
 
 .btn {
     padding: 14px 28px;
     border-radius: 8px;
     font-weight: 600;
-    transition: 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 .primary-btn {
@@ -66,36 +67,204 @@
 .primary-btn:hover {
     transform: translateY(-3px);
 }
+
 .secondary-btn {
     border: 2px solid #00bcd4;
     color: #00bcd4;
 }
 
 .secondary-btn:hover {
-
+    background: #00bcd4;
+    color: white;
     transform: translateY(-3px);
 }
+
+.cv-btn {
+    border: 2px solid #00bcd4;
+    color: #00bcd4;
+}
+
+.cv-btn:hover {
+    background: #00bcd4;
+    color: white;
+    transform: translateY(-3px);
+}
+
+/* =========================
+   Hero Image
+========================= */
 
 .hero-image {
     flex: 1;
     display: flex;
     justify-content: center;
+    align-items: center;
+    position: relative;
 }
+
+/* Rotating Ring */
+
+.hero-image::before {
+    content: "";
+
+    position: absolute;
+
+    width: 432px;
+    height: 432px;
+
+    border-radius: 50%;
+
+    background: conic-gradient(
+        #00bcd4,
+        #00e5ff,
+        #00bcd4,
+        #00e5ff,
+        #00bcd4
+    );
+
+    animation:
+        rotateRing 6s linear infinite,
+        pulseGlow 3s ease-in-out infinite;
+
+    z-index: 1;
+}
+
+/* Inner Cutout */
+
+.hero-image::after {
+    content: "";
+
+    position: absolute;
+
+    width: 426px;
+    height: 426px;
+
+    border-radius: 50%;
+
+    background: var(--bg-color);
+
+    z-index: 1;
+}
+
+/* Profile Image */
 
 .hero-image img {
     width: 420px;
     height: 420px;
+
     border-radius: 50%;
     object-fit: cover;
-    border: 5px solid #00bcd4;
-    box-shadow: 0 0 30px rgba(0, 188, 212, 0.4);
+
+    position: relative;
+    z-index: 2;
+
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* =========================
-   Responsive
+   Typing Animation
+========================= */
+
+.typing-container {
+    min-height: 60px;
+    color: #e5e7eb;
+    margin-bottom: 1.5rem;
+}
+
+#typing-text {
+    color: #00bcd4;
+}
+
+.cursor {
+    color: #00bcd4;
+    animation: blink 0.8s infinite;
+}
+
+/* =========================
+   Animations
+========================= */
+
+@keyframes blink {
+    0%,
+    50% {
+        opacity: 1;
+    }
+
+    51%,
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes rotateRing {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes pulseGlow {
+    0% {
+        box-shadow:
+            0 0 15px #00bcd4,
+            0 0 30px #00bcd4;
+    }
+
+    50% {
+        box-shadow:
+            0 0 30px #00e5ff,
+            0 0 60px #00e5ff;
+    }
+
+    100% {
+        box-shadow:
+            0 0 15px #00bcd4,
+            0 0 30px #00bcd4;
+    }
+}
+
+/* =========================
+   Tablet
+========================= */
+
+@media (max-width: 992px) {
+
+    .hero-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 3rem;
+    }
+
+    .hero-image {
+        order: -1;
+    }
+
+    .hero-text {
+        order: 1;
+    }
+
+    .hero-buttons {
+        justify-content: center;
+    }
+
+    .hero-text p {
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+/* =========================
+   Mobile
 ========================= */
 
 @media (max-width: 768px) {
+
+    .hero-section {
+        padding-top: 180px;
+    }
 
     .hero-content {
         flex-direction: column;
@@ -128,44 +297,14 @@
         width: 250px;
         height: 250px;
     }
-}
 
-.typing-container {
-    min-height: 60px;
-    color: #e5e7eb;
-    margin-bottom: 1.5rem;
-}
-
-#typing-text {
-    color: #00bcd4;
-}
-
-.cursor {
-    color: #00bcd4;
-    animation: blink 0.8s infinite;
-}
-
-@keyframes blink {
-
-    0%,
-    50% {
-        opacity: 1;
+    .hero-image::before {
+        width: 262px;
+        height: 262px;
     }
 
-    51%,
-    100% {
-        opacity: 0;
+    .hero-image::after {
+        width: 256px;
+        height: 256px;
     }
-
-}
-
-.cv-btn {
-    border: 2px solid #00bcd4;
-    color: #00bcd4;
-}
-
-.cv-btn:hover {
-    background: #00bcd4;
-    color: white;
-    transform: translateY(-3px);
 }
