@@ -66,15 +66,14 @@
 .primary-btn:hover {
     transform: translateY(-3px);
 }
-
 .secondary-btn {
     border: 2px solid #00bcd4;
     color: #00bcd4;
 }
 
 .secondary-btn:hover {
-    background: #00bcd4;
-    color: white;
+
+    transform: translateY(-3px);
 }
 
 .hero-image {
@@ -148,4 +147,15 @@
         opacity: 0;
     }
 
+}
+
+.cv-btn {
+    border: 2px solid #00bcd4;
+    color: #00bcd4;
+}
+
+.cv-btn:hover {
+    background: #00bcd4;
+    color: white;
+    transform: translateY(-3px);
 }
