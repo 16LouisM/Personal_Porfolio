@@ -98,8 +98,17 @@
 @media (max-width: 768px) {
 
     .hero-content {
-        flex-direction: column-reverse;
+        flex-direction: column;
         text-align: center;
+        gap: 2rem;
+    }
+
+    .hero-image {
+        order: -1;
+    }
+
+    .hero-text {
+        order: 1;
     }
 
     .hero-text h1 {
@@ -112,6 +121,7 @@
 
     .hero-buttons {
         justify-content: center;
+        flex-wrap: wrap;
     }
 
     .hero-image img {
