@@ -1,8 +1,10 @@
 // js/modules/theme.js
 
 export function initializeTheme() {
+
     const body = document.body;
     const themeToggle = document.querySelector("#theme-toggle");
+    const themeIcon = document.querySelector("#theme-icon");
 
     const savedTheme = localStorage.getItem("theme") || "dark";
 
@@ -18,10 +20,19 @@ export function initializeTheme() {
 
     function applyTheme(theme) {
         body.dataset.theme = theme;
-        body.classList.add("theme-transition");
 
-        setTimeout(() => {
-            body.classList.remove("theme-transition");
-        }, 300);
+        updateIcon(theme);
+    }
+
+    function updateIcon(theme) {
+        if (!themeIcon) return;
+
+        if (theme === "dark") {
+            // DARK MODE → SUN ICON ☀️
+            themeIcon.className = "fa-solid fa-sun";
+        } else {
+            // LIGHT MODE → HALF MOON 🌙
+            themeIcon.className = "fa-solid fa-moon";
+        }
     }
 }
