@@ -19,7 +19,7 @@ export async function loadNavbar() {
     // Sidebar toggle (safe, with overflow & pointer‑events)
     // =========================
     function toggleSidebar(forceState) {
-        const shouldOpen = (forceState !== undefined) ? forceState : !isSidebarOpen;
+        const shouldOpen = (forceState === undefined) ? !isSidebarOpen : forceState;
 
         if (shouldOpen === isSidebarOpen) return; // already in that state
 
@@ -33,11 +33,11 @@ export async function loadNavbar() {
         document.body.style.overflow = shouldOpen ? 'hidden' : '';
 
         // If closing, also force a small delay to let any pending clicks finish
-        if (!shouldOpen) {
+        if (shouldOpen) {
+            overlay.style.pointerEvents = 'auto';
+        } else {
             // Ensure overlay pointer-events are disabled (done via CSS, but safe)
             overlay.style.pointerEvents = 'none';
-        } else {
-            overlay.style.pointerEvents = 'auto';
         }
     }
 
@@ -196,10 +196,10 @@ export async function loadNavbar() {
 
         function applyTheme(dark) {
             if (dark) {
-                document.documentElement.setAttribute('data-theme', 'dark');
+                document.documentElement.dataset.theme = 'dark';
                 themeIcon.className = 'fa-solid fa-sun';
             } else {
-                document.documentElement.removeAttribute('data-theme');
+                delete document.documentElement.dataset.theme;
                 themeIcon.className = 'fa-solid fa-moon';
             }
             localStorage.setItem('theme', dark ? 'dark' : 'light');
