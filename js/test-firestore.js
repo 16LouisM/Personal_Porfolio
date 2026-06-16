@@ -1,4 +1,4 @@
-import app from "./firebase-config.js";
+import { app } from "./firebase-config.js";
 
 import {
   getFirestore,
@@ -11,9 +11,7 @@ const db = getFirestore(app);
 async function testFirestore() {
   try {
 
-    const snapshot = await getDocs(
-      collection(db, "projects")
-    );
+    const snapshot = await getDocs(collection(db, "projects"));
 
     console.log("✅ Firebase Connected");
     console.log("✅ Firestore Connected");
@@ -27,4 +25,4 @@ async function testFirestore() {
   }
 }
 
-testFirestore();
+await testFirestore();
