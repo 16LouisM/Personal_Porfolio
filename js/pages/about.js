@@ -1,53 +1,157 @@
 import { db } from "../firebase-config.js";
-import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+import {
+    doc,
+    getDoc,
+    collection,
+    getDocs
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+function setCounter(id, value) {
+
+    const element = document.getElementById(id);
+
+    if (element) {
+        element.dataset.count = value || 0;
+    }
+
+}
+
+function createTimelineItem(title, subtitle, description) {
+
+    return `
+        <div class="timeline-item">
+            <h3>${title || ""}</h3>
+            <span>${subtitle || ""}</span>
+            <p>${description || ""}</p>
+        </div>
+    `;
+
+}
+
+async function loadAboutText() {
+
+    const aboutSnap = await getDoc(
+        doc(db, "about", "main")
+    );
+
+    if (!aboutSnap.exists()) return;
+
+    const aboutText =
+        document.getElementById("about-text");
+
+    if (aboutText) {
+        aboutText.textContent =
+            aboutSnap.data().text || "";
+    }
+
+}
+
+async function loadStats() {
+
+    const statsSnap = await getDoc(
+        doc(db, "stats", "main")
+    );
+
+    if (!statsSnap.exists()) return;
+
+    const stats = statsSnap.data();
+
+    setCounter(
+        "projects-count",
+        stats.projects
+    );
+
+    setCounter(
+        "skills-count",
+        stats.skills
+    );
+
+    setCounter(
+        "certificates-count",
+        stats.certificates
+    );
+
+    setCounter(
+        "experience-years",
+        stats.experienceYears
+    );
+
+}
+
+async function loadExperience() {
+
+    const container =
+        document.getElementById("experience-list");
+
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    const snapshot = await getDocs(
+        collection(db, "experience")
+    );
+
+    snapshot.forEach((docSnap) => {
+
+        const data = docSnap.data();
+
+        container.innerHTML += createTimelineItem(
+            data.title,
+            data.period,
+            data.description
+        );
+
+    });
+
+}
+
+async function loadEducation() {
+
+    const container =
+        document.getElementById("education-list");
+
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    const snapshot = await getDocs(
+        collection(db, "education")
+    );
+
+    snapshot.forEach((docSnap) => {
+
+        const data = docSnap.data();
+
+        container.innerHTML += createTimelineItem(
+            data.institution,
+            data.qualification,
+            data.description
+        );
+
+    });
+
+}
 
 export async function initAboutPage() {
 
-  // prevent crash if section doesn't exist
-  if (!document.getElementById("about")) return;
+    if (!document.getElementById("about")) {
+        return;
+    }
 
-  const aboutSnap = await getDoc(doc(db, "about", "main"));
-  if (aboutSnap.exists()) {
-    document.getElementById("about-text").textContent = aboutSnap.data().text;
-  }
+    try {
 
-  const statsSnap = await getDoc(doc(db, "stats", "main"));
-  if (statsSnap.exists()) {
-    const data = statsSnap.data();
+        await loadAboutText();
+        await loadStats();
+        await loadExperience();
+        await loadEducation();
 
-    document.getElementById("projects-count").textContent = data.projects + "+";
-    document.getElementById("skills-count").textContent = data.skills + "+";
-    document.getElementById("certificates-count").textContent = data.certificates + "+";
-    document.getElementById("experience-years").textContent = data.experienceYears + "+";
-  }
+    } catch (error) {
 
-  const expContainer = document.getElementById("experience-list");
-  const expSnap = await getDocs(collection(db, "experience"));
+        console.error(
+            "Error loading About section:",
+            error
+        );
 
-  expSnap.forEach(doc => {
-    const d = doc.data();
+    }
 
-    expContainer.innerHTML += `
-      <div class="timeline-item">
-        <h3>${d.title}</h3>
-        <span>${d.period}</span>
-        <p>${d.description}</p>
-      </div>
-    `;
-  });
-
-  const eduContainer = document.getElementById("education-list");
-  const eduSnap = await getDocs(collection(db, "education"));
-
-  eduSnap.forEach(doc => {
-    const d = doc.data();
-
-    eduContainer.innerHTML += `
-      <div class="timeline-item">
-        <h3>${d.institution}</h3>
-        <span>${d.qualification}</span>
-        <p>${d.description}</p>
-      </div>
-    `;
-  });
 }

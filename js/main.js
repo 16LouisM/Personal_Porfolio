@@ -3,23 +3,71 @@ import { initializeTheme } from "./modules/theme.js";
 import { initializeAnimations } from "./modules/animations.js";
 import { loadProfile } from "./modules/profile.js";
 import { initializeTyping } from "./modules/typing.js";
+import { initializeCounters } from "./modules/counter.js";
+
 import { initAboutPage } from "./pages/about.js";
 
+// ======================
+// NAVBAR
+// ======================
+
 try {
-  await loadNavbar();
-} catch (e) {
-  console.error("Navbar failed:", e);
+
+    await loadNavbar();
+
+} catch (error) {
+
+    console.error(
+        "Navbar failed to load:",
+        error
+    );
+
 }
+
+// ======================
+// UI INITIALIZATION
+// ======================
 
 initializeTheme();
 initializeAnimations();
 initializeTyping();
 
-await loadProfile();
+// ======================
+// PROFILE
+// ======================
 
-// ⚠️ isolate About so it doesn't break everything
 try {
-  await initAboutPage();
-} catch (e) {
-  console.error("About section failed:", e);
+
+    await loadProfile();
+
+} catch (error) {
+
+    console.error(
+        "Profile failed to load:",
+        error
+    );
+
 }
+
+// ======================
+// ABOUT SECTION
+// ======================
+
+try {
+
+    await initAboutPage();
+
+} catch (error) {
+
+    console.error(
+        "About section failed:",
+        error
+    );
+
+}
+
+// ======================
+// COUNTERS
+// ======================
+
+initializeCounters();
