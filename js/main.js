@@ -6,68 +6,48 @@ import { initializeTyping } from "./modules/typing.js";
 import { initializeCounters } from "./modules/counter.js";
 
 import { initAboutPage } from "./pages/about.js";
+import { initSkills } from "./pages/skills.js";
 
 // ======================
-// NAVBAR
+// INIT APP AFTER DOM READY
 // ======================
 
-try {
+window.addEventListener("DOMContentLoaded", async () => {
 
-    await loadNavbar();
+    // UI INIT
+    initializeTheme();
+    initializeAnimations();
+    initializeTyping();
 
-} catch (error) {
+    // NAVBAR
+    try {
+        await loadNavbar();
+    } catch (error) {
+        console.error("Navbar failed:", error);
+    }
 
-    console.error(
-        "Navbar failed to load:",
-        error
-    );
+    // PROFILE
+    try {
+        await loadProfile();
+    } catch (error) {
+        console.error("Profile failed:", error);
+    }
 
-}
+    // ABOUT
+    try {
+        await initAboutPage();
+    } catch (error) {
+        console.error("About failed:", error);
+    }
 
-// ======================
-// UI INITIALIZATION
-// ======================
+    // SKILLS (NOW SAFE)
+    try {
+        await initSkills();
+    } catch (error) {
+        console.error("Skills failed:", error);
+    }
 
-initializeTheme();
-initializeAnimations();
-initializeTyping();
+    // COUNTERS
+    initializeCounters();
 
-// ======================
-// PROFILE
-// ======================
-
-try {
-
-    await loadProfile();
-
-} catch (error) {
-
-    console.error(
-        "Profile failed to load:",
-        error
-    );
-
-}
-
-// ======================
-// ABOUT SECTION
-// ======================
-
-try {
-
-    await initAboutPage();
-
-} catch (error) {
-
-    console.error(
-        "About section failed:",
-        error
-    );
-
-}
-
-// ======================
-// COUNTERS
-// ======================
-
-initializeCounters();
+});
