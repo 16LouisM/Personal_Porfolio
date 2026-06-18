@@ -36,12 +36,22 @@ async function loadAboutText() {
 
     if (!aboutSnap.exists()) return;
 
+    const data = aboutSnap.data();
+
     const aboutText =
         document.getElementById("about-text");
 
+    const journeyImage =
+        document.getElementById("journey-image");
+
     if (aboutText) {
         aboutText.textContent =
-            aboutSnap.data().text || "";
+            data.text || "";
+    }
+
+    if (journeyImage) {
+        journeyImage.src =
+            data.imageUrl || "";
     }
 
 }
