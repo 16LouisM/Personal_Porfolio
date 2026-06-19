@@ -24,31 +24,28 @@
     <link rel="stylesheet" href="css/animations.css">
     <link rel="stylesheet" href="css/responsive.css">
 
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- Devicon (IMPORTANT for skill icons) -->
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
 </head>
 
 <body>
 
-    <!-- ================= NAVBAR ================= -->
-    <header id="navbar-container">
-        <!-- Loaded dynamically from components/navbar.html -->
-    </header>
+    <header id="navbar-container"></header>
 
-    <!-- ================= MAIN CONTENT ================= -->
     <main>
 
-        <!-- HERO SECTION -->
+        <!-- HERO -->
         <section id="home" class="hero-section">
             <div class="container">
-
                 <div class="hero-content">
 
                     <div class="hero-text">
-
                         <span class="hero-greeting">Hello, I'm</span>
-
                         <h1 id="profile-name">Loading...</h1>
 
                         <h2 class="typing-container">
@@ -56,27 +53,13 @@
                             <span class="cursor">|</span>
                         </h2>
 
-                        <p id="profile-description">
-                            Loading profile description...
-                        </p>
+                        <p id="profile-description">Loading profile description...</p>
 
                         <div class="hero-buttons">
-
-                            <a href="#projects" class="btn primary-btn">
-                                View Projects
-                            </a>
-
-                            <a href="#contact" class="btn secondary-btn">
-                                Contact Me
-                            </a>
-
-                            <a id="view-cv-btn" href="#" target="_blank" rel="noopener noreferrer" class="btn cv-btn">
-                                View CV
-
-                            </a>
-
+                            <a href="#projects" class="btn primary-btn">View Projects</a>
+                            <a href="#contact" class="btn secondary-btn">Contact Me</a>
+                            <a id="view-cv-btn" href="#" target="_blank" class="btn cv-btn">View CV</a>
                         </div>
-
                     </div>
 
                     <div class="hero-image">
@@ -84,81 +67,54 @@
                     </div>
 
                 </div>
-
             </div>
         </section>
 
-        <!-- ABOUT SECTION -->
+        <!-- ABOUT -->
         <section id="about" class="about-section">
             <div class="container">
-
                 <h2 class="section-title">About Me</h2>
 
-                <!-- ABOUT CARD -->
                 <div class="journey-container">
-
                     <div class="journey-image">
-                        <img id="journey-image" src="" alt="My Journey">
+                        <img id="journey-image" src="" alt="">
                     </div>
 
                     <div class="journey-content">
-
                         <div class="about-card glass">
-
                             <h2>My Journey</h2>
-
-                            <p id="about-text">
-                                Loading...
-                            </p>
-
+                            <p id="about-text">Loading...</p>
                         </div>
-
                     </div>
-
                 </div>
 
-                <!-- STATS -->
                 <div class="stats-grid">
-
                     <div class="stat-card">
-                        <h3 id="projects-count" data-count="0">0+</h3>
+                        <h3 id="projects-count">0+</h3>
                         <p>Projects</p>
                     </div>
 
                     <div class="stat-card">
-                        <h3 id="skills-count" data-count="0">0+</h3>
+                        <h3 id="skills-count">0+</h3>
                         <p>Skills</p>
                     </div>
 
                     <div class="stat-card">
-                        <h3 id="certificates-count" data-count="0">0+</h3>
+                        <h3 id="certificates-count">0+</h3>
                         <p>Certificates</p>
                     </div>
 
                     <div class="stat-card">
-                        <h3 id="experience-years" data-count="0">0+</h3>
+                        <h3 id="experience-years">0+</h3>
                         <p>Years Experience</p>
                     </div>
-
                 </div>
-
-                <!-- EXPERIENCE -->
-                <div class="section-block">
-                    <h2>Experience</h2>
-                    <div id="experience-list" class="timeline"></div>
-                </div>
-
-                <!-- EDUCATION -->
-                <div class="section-block">
-                    <h2>Education</h2>
-                    <div id="education-list" class="timeline"></div>
-                </div>
-
             </div>
         </section>
 
-        <!-- SKILLS SECTION -->
+        <!-- SKILLS -->
         <section id="skills" class="skills-section">
+
             <div class="skills-container">
 
                 <div class="section-header">
@@ -166,63 +122,19 @@
                     <p>Technologies and tools I work with</p>
                 </div>
 
-                <!-- Categories will render here -->
-                <div id="skillsWrapper" class="skills-wrapper">
-                    <!-- Firebase skills load here -->
-                </div>
+                <div id="skillsWrapper" class="skills-wrapper"></div>
 
             </div>
-        </section>
 
-        <!-- PROJECTS SECTION -->
-        <section id="projects" class="projects-section">
-            <div class="container">
-
-                <h2 class="section-title">Projects</h2>
-
-                <div id="projects-grid" class="projects-grid">
-                    <!-- Firebase projects rendered here -->
-                </div>
-
-            </div>
-        </section>
-
-        <!-- CERTIFICATES SECTION -->
-        <section id="certificates" class="certificates-section">
-            <div class="container">
-
-                <h2 class="section-title">Certificates</h2>
-
-                <div id="certificates-grid" class="certificates-grid">
-                    <!-- Firebase certificates rendered here -->
-                </div>
-
-            </div>
-        </section>
-
-        <!-- CONTACT SECTION -->
-        <section id="contact" class="contact-section">
-            <div class="container">
-
-                <h2 class="section-title">Contact Me</h2>
-
-                <div id="contact-content">
-                    <!-- Firebase contact info -->
-                </div>
-
-            </div>
         </section>
 
     </main>
 
-    <!-- ================= FOOTER ================= -->
-    <footer id="footer-container">
-        <!-- Loaded dynamically from components/footer.html -->
-    </footer>
+    <footer id="footer-container"></footer>
 
-    <!-- ================= JAVASCRIPT ================= -->
     <script type="module" src="js/main.js"></script>
     <script type="module" src="./js/test-firestore.js"></script>
+
 </body>
 
 </html>

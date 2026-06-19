@@ -44,15 +44,34 @@ export async function initSkills() {
             let skillsHTML = `<h3>${category}</h3>`;
 
             grouped[category].forEach(skill => {
+
                 skillsHTML += `
                     <div class="skill-item">
-                        <div>
-                            <span>${skill.name}</span>
-                            <div class="skill-bar">
-                                <div class="skill-bar-fill" data-level="${skill.level}"></div>
+
+                        <div class="skill-info">
+
+                            <div class="skill-header">
+
+                                <i class="${skill.icon || 'fa-solid fa-code'} skill-icon"></i>
+
+                                <span class="skill-name">
+                                    ${skill.name}
+                                </span>
+
                             </div>
+
+                            <div class="skill-bar">
+                                <div class="skill-bar-fill"
+                                    data-level="${skill.level}">
+                                </div>
+                            </div>
+
                         </div>
-                        <span>${skill.level}%</span>
+
+                        <span class="skill-level">
+                            ${skill.level}%
+                        </span>
+
                     </div>
                 `;
             });
@@ -61,7 +80,7 @@ export async function initSkills() {
             skillsWrapper.appendChild(categoryDiv);
         });
 
-        // Animate bars AFTER render
+        // Animate bars
         setTimeout(() => {
             document.querySelectorAll(".skill-bar-fill").forEach(bar => {
                 bar.style.width = bar.dataset.level + "%";

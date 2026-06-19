@@ -43,10 +43,9 @@
 
 .skill-category:hover {
     transform: translateY(-6px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
 }
 
-/* CATEGORY TITLE */
+/* TITLE */
 .skill-category h3 {
     margin-bottom: 15px;
     font-size: 1.2rem;
@@ -58,29 +57,49 @@
 .skill-item {
     display: flex;
     justify-content: space-between;
-    margin: 10px 0;
+    margin: 12px 0;
     font-size: 0.95rem;
+    align-items: flex-start;
 }
 
+/* LEFT SIDE */
+.skill-info {
+    flex: 1;
+}
+
+.skill-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+
+.skill-icon {
+    font-size: 1.3rem;
+    width: 22px;
+}
+
+.skill-name {
+    font-weight: 500;
+}
+
+/* BAR */
 .skill-bar {
     height: 6px;
     background: rgba(255,255,255,0.1);
     border-radius: 10px;
     overflow: hidden;
-    margin-top: 5px;
 }
 
 .skill-bar-fill {
     height: 100%;
     width: 0;
     background: linear-gradient(90deg, #00bcd4, #4caf50);
-    border-radius: 10px;
     transition: width 1s ease;
 }
 
-/* RESPONSIVE */
-@media (max-width: 600px) {
-    .section-header h2 {
-        font-size: 1.8rem;
-    }
+/* RIGHT PERCENT */
+.skill-level {
+    margin-left: 12px;
+    font-weight: 600;
 }
