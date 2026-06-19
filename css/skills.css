@@ -103,11 +103,11 @@
 /* ---- hover state ---- */
 .skill-category:hover {
     transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.10),
-                0 0 30px rgba(0, 212, 255, 0.06); /* accent glow */
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.10);
     border-color: rgba(0, 212, 255, 0.15);
     background: rgba(255, 255, 255, 0.06);
 }
+
 
 .skill-category:hover::after {
     opacity: 1;
