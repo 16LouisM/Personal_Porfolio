@@ -8,7 +8,7 @@ import { initializeCounters } from "./modules/counter.js";
 import { initAboutPage } from "./pages/about.js";
 import { initSkills } from "./pages/skills.js";
 import { initProjects } from "./pages/projects.js";
-
+import { initCertificates } from "./pages/certificates.js";
 // ======================
 // INIT APP AFTER DOM READY
 // ======================
@@ -48,7 +48,13 @@ window.addEventListener("DOMContentLoaded", async () => {
         console.error("Skills failed:", error);
     }
 
-    
+    // CERTIFICATES
+    try {
+        await initCertificates();
+    } catch (error) {
+        console.error("Certificates failed:", error);
+    }
+
     // PROJECTS
         try {
             await initProjects();
