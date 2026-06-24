@@ -9,39 +9,28 @@ import {
 
 let modal;
 
-/**
- * INIT PROJECTS
- */
+/* INIT */
 export async function initProjects() {
 
     const projectsGrid = document.getElementById("projects-grid");
-
     if (!projectsGrid) return;
 
     modal = document.getElementById("projectModal");
 
     try {
 
-        const projectsRef = collection(db, "projects");
-
-        const projectsQuery = query(
-            projectsRef,
-            orderBy("order", "asc")
+        const snapshot = await getDocs(
+            query(collection(db, "projects"), orderBy("order", "asc"))
         );
-
-        const snapshot = await getDocs(projectsQuery);
 
         projectsGrid.innerHTML = "";
 
         if (snapshot.empty) {
-
             projectsGrid.innerHTML = `
                 <div class="projects-empty">
                     <h3>No Projects Found</h3>
-                    <p>Projects will appear here once they are added.</p>
                 </div>
             `;
-
             return;
         }
 
@@ -52,15 +41,13 @@ export async function initProjects() {
             const card = document.createElement("article");
             card.className = "project-card";
 
-            const technologies = project.technologies || [];
-
-            const techBadges = technologies
-                .map(tech => `<span class="tech-badge">${tech}</span>`)
+            const techBadges = (project.technologies || [])
+                .map(t => `<span class="tech-badge">${t}</span>`)
                 .join("");
 
             card.innerHTML = `
                 <div class="project-image">
-                    <img src="${project.imageUrl}" alt="${project.name}" loading="lazy">
+                    <img src="${project.imageUrl}" alt="${project.name}">
                 </div>
 
                 <div class="project-content">
@@ -75,16 +62,13 @@ export async function initProjects() {
 
                     <div class="project-links">
 
-                        <a href="${project.projectUrl}" target="_blank"
-                           rel="noopener noreferrer"
-                           class="project-btn demo-btn">
-
-                            <i class="fas fa-arrow-up-right-from-square"></i>
-                            View Project
+                        <a class="project-btn demo-btn"
+                           href="${project.projectUrl}"
+                           target="_blank">
+                           View
                         </a>
 
                         <button class="project-btn details-btn">
-                            <i class="fas fa-info-circle"></i>
                             Details
                         </button>
 
@@ -93,49 +77,29 @@ export async function initProjects() {
                 </div>
             `;
 
-            // OPEN MODAL
-            const detailsBtn = card.querySelector(".details-btn");
-
-            detailsBtn.addEventListener("click", () => {
-                openProjectModal(project);
-            });
+            card.querySelector(".details-btn")
+                .addEventListener("click", () => openProjectModal(project));
 
             projectsGrid.appendChild(card);
         });
 
-    } catch (error) {
-
-        console.error("Failed to load projects:", error);
-
-        projectsGrid.innerHTML = `
-            <div class="projects-empty">
-                <h3>Unable to Load Projects</h3>
-                <p>Please try again later.</p>
-            </div>
-        `;
+    } catch (err) {
+        console.error(err);
     }
 }
 
-/**
- * OPEN MODAL
- */
+/* OPEN MODAL */
 function openProjectModal(project) {
 
-    if (!modal) return;
+    const modal = document.getElementById("projectModal");
 
-    modal.classList.remove("hidden");
+    modal.classList.add("show");
 
-    // Title + text
-    document.getElementById("modalTitle").textContent =
-        project.name || "Untitled Project";
+    document.getElementById("modalTitle").textContent = project.name || "";
+    document.getElementById("modalSubtitle").textContent = project.subtitle || "";
+    document.getElementById("modalDescription").textContent = project.description || "";
 
-    document.getElementById("modalSubtitle").textContent =
-        project.subtitle || "";
-
-    document.getElementById("modalDescription").textContent =
-        project.description || "";
-
-    // ===== GALLERY =====
+    /* Gallery */
     const gallery = document.getElementById("modalGallery");
     gallery.innerHTML = "";
 
@@ -144,61 +108,51 @@ function openProjectModal(project) {
         : [project.imageUrl];
 
     images.forEach(img => {
-        const image = document.createElement("img");
-        image.src = img;
-        image.alt = project.name;
-        gallery.appendChild(image);
+        const el = document.createElement("img");
+        el.src = img;
+        gallery.appendChild(el);
     });
 
-    // ===== TECH STACK =====
-    const techStack = document.getElementById("modalTechStack");
-    techStack.innerHTML = "";
+    /* Tech */
+    const tech = document.getElementById("modalTechStack");
+    tech.innerHTML = "";
 
-    (project.technologies || []).forEach(tech => {
+    (project.technologies || []).forEach(t => {
         const span = document.createElement("span");
-        span.textContent = tech;
-        techStack.appendChild(span);
+        span.textContent = t;
+        tech.appendChild(span);
     });
 
-    // ===== FEATURES =====
-    const featuresList = document.getElementById("modalFeatures");
-    featuresList.innerHTML = "";
+    /* Features */
+    const features = document.getElementById("modalFeatures");
+    features.innerHTML = "";
 
-    (project.features || []).forEach(feature => {
+    (project.features || []).forEach(f => {
         const li = document.createElement("li");
-        li.textContent = feature;
-        featuresList.appendChild(li);
+        li.textContent = f;
+        features.appendChild(li);
     });
 }
 
-/**
- * CLOSE MODAL
- */
+/* CLOSE MODAL */
 function closeModal() {
-    if (!modal) return;
-    modal.classList.add("hidden");
+    const modal = document.getElementById("projectModal");
+    modal.classList.remove("show");
 }
 
-/**
- * EVENT LISTENERS
- */
+/* EVENTS */
 document.addEventListener("DOMContentLoaded", () => {
 
+    const modal = document.getElementById("projectModal");
     const closeBtn = document.getElementById("closeModalBtn");
 
     closeBtn?.addEventListener("click", closeModal);
 
-    // click outside modal closes it
     modal?.addEventListener("click", (e) => {
-        if (e.target === modal) {
-            closeModal();
-        }
+        if (e.target === modal) closeModal();
     });
 
-    // ESC key closes modal
     document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") {
-            closeModal();
-        }
+        if (e.key === "Escape") closeModal();
     });
 });
