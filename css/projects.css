@@ -33,9 +33,9 @@
     font-weight: 600;
     letter-spacing: 1px;
     text-transform: uppercase;
-    background: rgba(0, 212, 255, 0.12);
-    color: #00d4ff;
-    border: 1px solid rgba(0, 212, 255, 0.15);
+    background: rgba(0, 188, 212, 0.12);
+    color: #00bcd4;
+    border: 1px solid rgba(0, 188, 212, 0.15);
     margin-bottom: 14px;
 }
 
@@ -94,7 +94,7 @@
     left: 30%;
     right: 30%;
     height: 2px;
-    background: #00d4ff;
+    background: #00bcd4;
     border-radius: 4px;
     opacity: 0;
     transition: opacity 0.4s ease, left 0.4s ease, right 0.4s ease;
@@ -103,8 +103,8 @@
 .project-card:hover {
     transform: translateY(-8px) scale(1.02);
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.10),
-                0 0 30px rgba(0, 212, 255, 0.06);
-    border-color: rgba(0, 212, 255, 0.15);
+                0 0 30px rgba(0, 188, 212, 0.06);
+    border-color: rgba(0, 188, 212, 0.15);
     background: rgba(255, 255, 255, 0.06);
 }
 
@@ -177,9 +177,9 @@
     border-radius: 50px;
     font-size: 0.75rem;
     font-weight: 600;
-    background: rgba(0, 212, 255, 0.08);
-    color: #00d4ff;
-    border: 1px solid rgba(0, 212, 255, 0.10);
+    background: rgba(0, 188, 212, 0.08);
+    color: #00bcd4;
+    border: 1px solid rgba(0, 188, 212, 0.10);
     letter-spacing: 0.3px;
 }
 
@@ -218,16 +218,16 @@
 }
 
 .demo-btn {
-    background: #00d4ff;
+    background: #00bcd4;
     color: #fff;
-    border: 1px solid #00d4ff;
+    border: 1px solid #00bcd4;
 }
 
 .demo-btn:hover {
-    background: #00bcd4;
-    border-color: #00bcd4;
+    background: #0099b5;
+    border-color: #0099b5;
     transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(0, 212, 255, 0.25);
+    box-shadow: 0 4px 15px rgba(0, 188, 212, 0.25);
 }
 
 /* =========================
@@ -300,9 +300,9 @@
 
 [data-theme="light"] .project-card:hover {
     background: rgba(255, 255, 255, 0.75);
-    border-color: rgba(0, 212, 255, 0.20);
+    border-color: rgba(0, 188, 212, 0.20);
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06),
-                0 0 30px rgba(0, 212, 255, 0.05);
+                0 0 30px rgba(0, 188, 212, 0.05);
 }
 
 [data-theme="light"] .github-btn {
@@ -316,9 +316,9 @@
 }
 
 [data-theme="light"] .tech-badge {
-    background: rgba(0, 212, 255, 0.06);
+    background: rgba(0, 188, 212, 0.06);
     color: #0099b5;
-    border-color: rgba(0, 212, 255, 0.08);
+    border-color: rgba(0, 188, 212, 0.08);
 }
 
 /* =========================
@@ -427,8 +427,8 @@
 }
 
 .tech-stack span {
-    background: rgba(0, 212, 255, 0.12);
-    color: #00d4ff;
+    background: rgba(0, 188, 212, 0.12);
+    color: #00bcd4;
     padding: 4px 12px;
     border-radius: 20px;
     font-size: 0.8rem;
@@ -451,7 +451,7 @@
 }
 
 [data-theme="light"] .tech-stack span {
-    background: rgba(0, 212, 255, 0.08);
+    background: rgba(0, 188, 212, 0.08);
     color: #0099b5;
 }
 
