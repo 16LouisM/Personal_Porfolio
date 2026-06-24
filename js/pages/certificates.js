@@ -94,4 +94,6 @@ window.addEventListener("click", (e) => {
    INIT
 ========================= */
 
-await fetchCertificates();
+export async function initCertificates() {
+    await fetchCertificates();
+}
