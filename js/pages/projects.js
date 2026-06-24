@@ -7,15 +7,27 @@ import {
     orderBy
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
-let modal;
+/* =========================
+   GLOBAL STATE
+========================= */
 
-/* INIT */
+let modal;
+let zoomOverlay;
+let zoomImage;
+
+/* =========================
+   INIT PROJECTS
+========================= */
+
 export async function initProjects() {
 
     const projectsGrid = document.getElementById("projects-grid");
     if (!projectsGrid) return;
 
     modal = document.getElementById("projectModal");
+
+    // init zoom system
+    initImageZoom();
 
     try {
 
@@ -35,72 +47,106 @@ export async function initProjects() {
         }
 
         snapshot.forEach((doc) => {
-
             const project = doc.data();
-
-            const card = document.createElement("article");
-            card.className = "project-card";
-
-            const techBadges = (project.technologies || [])
-                .map(t => `<span class="tech-badge">${t}</span>`)
-                .join("");
-
-            card.innerHTML = `
-                <div class="project-image">
-                    <img src="${project.imageUrl}" alt="${project.name}">
-                </div>
-
-                <div class="project-content">
-
-                    <h3 class="project-title">${project.name}</h3>
-
-                    <p class="project-description">${project.description}</p>
-
-                    <div class="project-tech">
-                        ${techBadges}
-                    </div>
-
-                    <div class="project-links">
-
-                        <a class="project-btn demo-btn"
-                           href="${project.projectUrl}"
-                           target="_blank">
-                           View
-                        </a>
-
-                        <button class="project-btn details-btn">
-                            Details
-                        </button>
-
-                    </div>
-
-                </div>
-            `;
-
-            card.querySelector(".details-btn")
-                .addEventListener("click", () => openProjectModal(project));
-
+            const card = createProjectCard(project);
             projectsGrid.appendChild(card);
         });
 
     } catch (err) {
-        console.error(err);
+        console.error("Failed to load projects:", err);
     }
 }
 
-/* OPEN MODAL */
+/* =========================
+   CREATE PROJECT CARD
+========================= */
+
+function createProjectCard(project) {
+
+    const card = document.createElement("article");
+    card.className = "project-card";
+
+    const techBadges = (project.technologies || [])
+        .map(t => `<span class="tech-badge">${t}</span>`)
+        .join("");
+
+    card.innerHTML = `
+        <div class="project-image">
+            <img src="${project.imageUrl}" alt="${project.name}" loading="lazy">
+        </div>
+
+        <div class="project-content">
+
+            <h3 class="project-title">${project.name || "Untitled"}</h3>
+
+            <p class="project-description">
+                ${project.description || ""}
+            </p>
+
+            <div class="project-tech">
+                ${techBadges}
+            </div>
+
+            <div class="project-links">
+
+                <a class="project-btn demo-btn"
+                   href="${project.projectUrl || "#"}"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                   View
+                </a>
+
+                <button class="project-btn details-btn">
+                    Details
+                </button>
+
+            </div>
+
+        </div>
+    `;
+
+    card.querySelector(".details-btn")
+        .addEventListener("click", () => openProjectModal(project));
+
+    return card;
+}
+
+/* =========================
+   OPEN MODAL
+========================= */
+
 function openProjectModal(project) {
 
-    const modal = document.getElementById("projectModal");
+    const modalEl = document.getElementById("projectModal");
+    modalEl.classList.add("show");
 
-    modal.classList.add("show");
+    setText("modalTitle", project.name);
+    setText("modalSubtitle", project.subtitle);
+    setText("modalDescription", project.description);
 
-    document.getElementById("modalTitle").textContent = project.name || "";
-    document.getElementById("modalSubtitle").textContent = project.subtitle || "";
-    document.getElementById("modalDescription").textContent = project.description || "";
+    renderGallery(project);
+    renderTech(project);
+    renderFeatures(project);
+}
 
-    /* Gallery */
+/* =========================
+   MODAL HELPERS
+========================= */
+
+function setText(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value || "";
+}
+
+/* =========================
+   GALLERY
+========================= */
+
+function renderGallery(project) {
+
     const gallery = document.getElementById("modalGallery");
+    if (!gallery) return;
+
     gallery.innerHTML = "";
 
     const images = project.images?.length
@@ -108,13 +154,31 @@ function openProjectModal(project) {
         : [project.imageUrl];
 
     images.forEach(img => {
-        const el = document.createElement("img");
-        el.src = img;
-        gallery.appendChild(el);
-    });
 
-    /* Tech */
+        const image = document.createElement("img");
+        image.src = img;
+        image.alt = project.name || "project image";
+        image.loading = "lazy";
+        image.style.cursor = "zoom-in";
+
+        // ZOOM CLICK
+        image.addEventListener("click", () => {
+            openImageZoom(img);
+        });
+
+        gallery.appendChild(image);
+    });
+}
+
+/* =========================
+   TECH STACK
+========================= */
+
+function renderTech(project) {
+
     const tech = document.getElementById("modalTechStack");
+    if (!tech) return;
+
     tech.innerHTML = "";
 
     (project.technologies || []).forEach(t => {
@@ -122,9 +186,17 @@ function openProjectModal(project) {
         span.textContent = t;
         tech.appendChild(span);
     });
+}
 
-    /* Features */
+/* =========================
+   FEATURES
+========================= */
+
+function renderFeatures(project) {
+
     const features = document.getElementById("modalFeatures");
+    if (!features) return;
+
     features.innerHTML = "";
 
     (project.features || []).forEach(f => {
@@ -134,25 +206,69 @@ function openProjectModal(project) {
     });
 }
 
-/* CLOSE MODAL */
+/* =========================
+   CLOSE MODAL
+========================= */
+
 function closeModal() {
-    const modal = document.getElementById("projectModal");
-    modal.classList.remove("show");
+    const modalEl = document.getElementById("projectModal");
+    modalEl.classList.remove("show");
 }
 
-/* EVENTS */
-document.addEventListener("DOMContentLoaded", () => {
+/* =========================
+   IMAGE ZOOM SYSTEM
+========================= */
 
-    const modal = document.getElementById("projectModal");
-    const closeBtn = document.getElementById("closeModalBtn");
+function initImageZoom() {
 
-    closeBtn?.addEventListener("click", closeModal);
+    zoomOverlay = document.getElementById("imageZoom");
+    zoomImage = document.getElementById("zoomImage");
 
-    modal?.addEventListener("click", (e) => {
-        if (e.target === modal) closeModal();
+    const closeBtn = document.getElementById("zoomCloseBtn");
+
+    closeBtn?.addEventListener("click", closeImageZoom);
+
+    zoomOverlay?.addEventListener("click", (e) => {
+        if (e.target === zoomOverlay) {
+            closeImageZoom();
+        }
     });
 
     document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") closeModal();
+        if (e.key === "Escape") {
+            closeModal();
+            closeImageZoom();
+        }
     });
+}
+
+function openImageZoom(src) {
+    if (!zoomOverlay || !zoomImage) return;
+
+    zoomImage.src = src;
+    zoomOverlay.classList.add("show");
+}
+
+function closeImageZoom() {
+    if (!zoomOverlay || !zoomImage) return;
+
+    zoomOverlay.classList.remove("show");
+    zoomImage.src = "";
+}
+
+/* =========================
+   EVENTS (MODAL CLOSE)
+========================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const closeBtn = document.getElementById("closeModalBtn");
+    const modalEl = document.getElementById("projectModal");
+
+    closeBtn?.addEventListener("click", closeModal);
+
+    modalEl?.addEventListener("click", (e) => {
+        if (e.target === modalEl) closeModal();
+    });
+
 });

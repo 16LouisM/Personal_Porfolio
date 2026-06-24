@@ -331,3 +331,61 @@
 .modal-body ul {
     padding-left: 20px;
 }
+
+/* ===================================
+   IMAGE ZOOM LIGHTBOX
+=================================== */
+
+.image-zoom {
+    position: fixed;
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.85);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 10000;
+
+    opacity: 0;
+    pointer-events: none;
+
+    transition: opacity 0.25s ease;
+}
+
+/* ACTIVE STATE */
+.image-zoom.show {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* ZOOM IMAGE */
+.image-zoom img {
+    max-width: 90%;
+    max-height: 90%;
+
+    border-radius: 12px;
+
+    transform: scale(0.9);
+    transition: transform 0.25s ease;
+}
+
+/* animate image in */
+.image-zoom.show img {
+    transform: scale(1);
+}
+
+/* CLOSE BUTTON */
+.zoom-close {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+
+    font-size: 35px;
+    color: white;
+    cursor: pointer;
+
+    -webkit-user-select: none;
+    user-select: none;
+}
