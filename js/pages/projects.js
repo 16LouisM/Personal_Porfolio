@@ -51,10 +51,12 @@ export async function initProjects() {
             return;
         }
 
-        snapshot.forEach((doc, index) => {
+        snapshot.forEach((doc) => {
             const project = doc.data();
 
             currentProjects.push(project);
+
+            const index = currentProjects.length - 1;
 
             const card = createProjectCard(project, index);
             projectsGrid.appendChild(card);
@@ -122,13 +124,19 @@ function createProjectCard(project, index) {
 }
 
 /* =========================
-   OPEN MODAL (INDEX BASED)
+   OPEN MODAL (SAFE VERSION)
 ========================= */
 
 function openProjectModal(index) {
 
+    const project = currentProjects?.[index];
+
+    if (!project) {
+        console.error("Invalid project index:", index);
+        return;
+    }
+
     currentProjectIndex = index;
-    const project = currentProjects[index];
 
     const modalEl = document.getElementById("projectModal");
     modalEl.classList.add("show");
@@ -147,6 +155,7 @@ function openProjectModal(index) {
 ========================= */
 
 function nextProject() {
+
     if (!currentProjects.length) return;
 
     currentProjectIndex =
@@ -156,6 +165,7 @@ function nextProject() {
 }
 
 function prevProject() {
+
     if (!currentProjects.length) return;
 
     currentProjectIndex =
@@ -208,7 +218,7 @@ function renderGallery(project) {
         gallery.appendChild(image);
     });
 
-    /* SWIPE SUPPORT */
+    /* SWIPE */
     gallery.addEventListener("touchstart", (e) => {
         startX = e.touches[0].clientX;
     });
@@ -231,6 +241,7 @@ function renderGallery(project) {
 ========================= */
 
 function nextImage(images) {
+
     currentImageIndex =
         (currentImageIndex + 1) % images.length;
 
@@ -238,6 +249,7 @@ function nextImage(images) {
 }
 
 function prevImage(images) {
+
     currentImageIndex =
         (currentImageIndex - 1 + images.length) % images.length;
 
