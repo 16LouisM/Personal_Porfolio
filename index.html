@@ -207,16 +207,25 @@
 
         <!-- CERTIFICATES SECTION -->
         <section id="certificates" class="certificates-section">
-            <div class="container">
+            <div class="section-header">
+                <h2>Certificates</h2>
+                <p>My learning achievements and certifications</p>
+            </div>
 
-                <h2 class="section-title">Certificates</h2>
-
-                <div id="certificates-grid" class="certificates-grid">
-                    <!-- Firebase certificates rendered here -->
-                </div>
-
+            <div class="certificates-container" id="certificatesContainer">
+                <!-- Firebase certificates load here -->
             </div>
         </section>
+
+        <!-- Certificate Modal -->
+        <div class="certificate-modal" id="certificateModal">
+            <span class="close-modal" id="closeCertificateModal">&times;</span>
+            <img id="modalCertificateImage" src="" alt="Certificate">
+            <div class="modal-info">
+                <h3 id="modalCertificateTitle"></h3>
+                <p id="modalCertificateDescription"></p>
+            </div>
+        </div>
 
         <!-- CONTACT SECTION -->
         <section id="contact" class="contact-section">
@@ -243,45 +252,45 @@
     <script type="module" src="./js/test-firestore.js"></script>
 
     <!-- PROJECT DETAILS MODAL -->
-<div id="projectModal" class="modal-overlay hidden">
-    <div class="modal-content">
+    <div id="projectModal" class="modal-overlay hidden">
+        <div class="modal-content">
 
-        <!-- Close Button -->
-        <button class="modal-close" id="closeModalBtn">
-            <i class="fa-solid fa-xmark"></i>
-        </button>
+            <!-- Close Button -->
+            <button class="modal-close" id="closeModalBtn">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
 
-        <!-- Header -->
-        <div class="modal-header">
-            <h2 id="modalTitle">Project Title</h2>
-            <p id="modalSubtitle">Short description goes here</p>
+            <!-- Header -->
+            <div class="modal-header">
+                <h2 id="modalTitle">Project Title</h2>
+                <p id="modalSubtitle">Short description goes here</p>
+            </div>
+
+            <!-- Screenshots -->
+            <div class="modal-gallery" id="modalGallery">
+                <!-- Images injected by JS -->
+            </div>
+
+            <!-- Details -->
+            <div class="modal-body">
+                <h3>Project Details</h3>
+                <p id="modalDescription"></p>
+
+                <h3>Technologies</h3>
+                <div id="modalTechStack" class="tech-stack"></div>
+
+                <h3>Features</h3>
+                <ul id="modalFeatures"></ul>
+            </div>
+
         </div>
-
-        <!-- Screenshots -->
-        <div class="modal-gallery" id="modalGallery">
-            <!-- Images injected by JS -->
-        </div>
-
-        <!-- Details -->
-        <div class="modal-body">
-            <h3>Project Details</h3>
-            <p id="modalDescription"></p>
-
-            <h3>Technologies</h3>
-            <div id="modalTechStack" class="tech-stack"></div>
-
-            <h3>Features</h3>
-            <ul id="modalFeatures"></ul>
-        </div>
-
     </div>
-</div>
-<!-- IMAGE ZOOM LIGHTBOX -->
-<div id="imageZoom" class="image-zoom">
-    <span class="zoom-close" id="zoomCloseBtn">&times;</span>
+    <!-- IMAGE ZOOM LIGHTBOX -->
+    <div id="imageZoom" class="image-zoom">
+        <span class="zoom-close" id="zoomCloseBtn">&times;</span>
 
-    <img id="zoomImage" src="" alt="Zoomed">
-</div>
+        <img id="zoomImage" src="" alt="Zoomed">
+    </div>
 </body>
 
 </html>
