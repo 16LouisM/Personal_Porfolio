@@ -15,6 +15,10 @@ let modal;
 let zoomOverlay;
 let zoomImage;
 
+let currentProjects = [];
+let currentProjectIndex = 0;
+let currentImageIndex = 0;
+
 /* =========================
    INIT PROJECTS
 ========================= */
@@ -26,8 +30,8 @@ export async function initProjects() {
 
     modal = document.getElementById("projectModal");
 
-    // init zoom system
     initImageZoom();
+    initKeyboardControls();
 
     try {
 
@@ -36,6 +40,7 @@ export async function initProjects() {
         );
 
         projectsGrid.innerHTML = "";
+        currentProjects = [];
 
         if (snapshot.empty) {
             projectsGrid.innerHTML = `
@@ -46,9 +51,12 @@ export async function initProjects() {
             return;
         }
 
-        snapshot.forEach((doc) => {
+        snapshot.forEach((doc, index) => {
             const project = doc.data();
-            const card = createProjectCard(project);
+
+            currentProjects.push(project);
+
+            const card = createProjectCard(project, index);
             projectsGrid.appendChild(card);
         });
 
@@ -61,7 +69,7 @@ export async function initProjects() {
    CREATE PROJECT CARD
 ========================= */
 
-function createProjectCard(project) {
+function createProjectCard(project, index) {
 
     const card = document.createElement("article");
     card.className = "project-card";
@@ -106,16 +114,21 @@ function createProjectCard(project) {
     `;
 
     card.querySelector(".details-btn")
-        .addEventListener("click", () => openProjectModal(project));
+        .addEventListener("click", () => {
+            openProjectModal(index);
+        });
 
     return card;
 }
 
 /* =========================
-   OPEN MODAL
+   OPEN MODAL (INDEX BASED)
 ========================= */
 
-function openProjectModal(project) {
+function openProjectModal(index) {
+
+    currentProjectIndex = index;
+    const project = currentProjects[index];
 
     const modalEl = document.getElementById("projectModal");
     modalEl.classList.add("show");
@@ -130,6 +143,29 @@ function openProjectModal(project) {
 }
 
 /* =========================
+   NAVIGATION (PROJECTS)
+========================= */
+
+function nextProject() {
+    if (!currentProjects.length) return;
+
+    currentProjectIndex =
+        (currentProjectIndex + 1) % currentProjects.length;
+
+    openProjectModal(currentProjectIndex);
+}
+
+function prevProject() {
+    if (!currentProjects.length) return;
+
+    currentProjectIndex =
+        (currentProjectIndex - 1 + currentProjects.length) %
+        currentProjects.length;
+
+    openProjectModal(currentProjectIndex);
+}
+
+/* =========================
    MODAL HELPERS
 ========================= */
 
@@ -139,7 +175,7 @@ function setText(id, value) {
 }
 
 /* =========================
-   GALLERY
+   GALLERY (SWIPE + ZOOM)
 ========================= */
 
 function renderGallery(project) {
@@ -153,6 +189,10 @@ function renderGallery(project) {
         ? project.images
         : [project.imageUrl];
 
+    currentImageIndex = 0;
+
+    let startX = 0;
+
     images.forEach(img => {
 
         const image = document.createElement("img");
@@ -161,13 +201,47 @@ function renderGallery(project) {
         image.loading = "lazy";
         image.style.cursor = "zoom-in";
 
-        // ZOOM CLICK
         image.addEventListener("click", () => {
             openImageZoom(img);
         });
 
         gallery.appendChild(image);
     });
+
+    /* SWIPE SUPPORT */
+    gallery.addEventListener("touchstart", (e) => {
+        startX = e.touches[0].clientX;
+    });
+
+    gallery.addEventListener("touchend", (e) => {
+
+        const endX = e.changedTouches[0].clientX;
+        const diff = startX - endX;
+
+        if (Math.abs(diff) > 50) {
+
+            if (diff > 0) nextImage(images);
+            else prevImage(images);
+        }
+    });
+}
+
+/* =========================
+   IMAGE NAVIGATION
+========================= */
+
+function nextImage(images) {
+    currentImageIndex =
+        (currentImageIndex + 1) % images.length;
+
+    openImageZoom(images[currentImageIndex]);
+}
+
+function prevImage(images) {
+    currentImageIndex =
+        (currentImageIndex - 1 + images.length) % images.length;
+
+    openImageZoom(images[currentImageIndex]);
 }
 
 /* =========================
@@ -233,15 +307,9 @@ function initImageZoom() {
             closeImageZoom();
         }
     });
-
-    document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") {
-            closeModal();
-            closeImageZoom();
-        }
-    });
 }
 
+/* OPEN ZOOM */
 function openImageZoom(src) {
     if (!zoomOverlay || !zoomImage) return;
 
@@ -249,6 +317,7 @@ function openImageZoom(src) {
     zoomOverlay.classList.add("show");
 }
 
+/* CLOSE ZOOM */
 function closeImageZoom() {
     if (!zoomOverlay || !zoomImage) return;
 
@@ -257,7 +326,48 @@ function closeImageZoom() {
 }
 
 /* =========================
-   EVENTS (MODAL CLOSE)
+   KEYBOARD CONTROLS
+========================= */
+
+function initKeyboardControls() {
+
+    document.addEventListener("keydown", (e) => {
+
+        const project = currentProjects[currentProjectIndex];
+        if (!project) return;
+
+        const images = project.images?.length
+            ? project.images
+            : [project.imageUrl];
+
+        switch (e.key) {
+
+            case "Escape":
+                closeModal();
+                closeImageZoom();
+                break;
+
+            case "ArrowRight":
+                nextProject();
+                break;
+
+            case "ArrowLeft":
+                prevProject();
+                break;
+
+            case "ArrowUp":
+                nextImage(images);
+                break;
+
+            case "ArrowDown":
+                prevImage(images);
+                break;
+        }
+    });
+}
+
+/* =========================
+   EVENTS
 ========================= */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -270,5 +380,4 @@ document.addEventListener("DOMContentLoaded", () => {
     modalEl?.addEventListener("click", (e) => {
         if (e.target === modalEl) closeModal();
     });
-
 });
