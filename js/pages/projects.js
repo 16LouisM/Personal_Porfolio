@@ -1,4 +1,4 @@
-import { db } from "../firebase/firebase-config.js";
+import { db } from "./firebase-config.js";
 
 import {
     collection,
@@ -9,24 +9,20 @@ import {
 
 export async function initProjects() {
 
-    const projectsGrid =
-        document.getElementById("projects-grid");
+    const projectsGrid = document.getElementById("projects-grid");
 
     if (!projectsGrid) return;
 
     try {
 
-        const projectsRef =
-            collection(db, "projects");
+        const projectsRef = collection(db, "projects");
 
-        const projectsQuery =
-            query(
-                projectsRef,
-                orderBy("order", "asc")
-            );
+        const projectsQuery = query(
+            projectsRef,
+            orderBy("order", "asc")
+        );
 
-        const snapshot =
-            await getDocs(projectsQuery);
+        const snapshot = await getDocs(projectsQuery);
 
         projectsGrid.innerHTML = "";
 
@@ -34,41 +30,46 @@ export async function initProjects() {
 
             projectsGrid.innerHTML = `
                 <div class="projects-empty">
-                    No projects found.
+                    <h3>No Projects Found</h3>
+                    <p>Projects will appear here once they are added.</p>
                 </div>
             `;
 
             return;
         }
 
-        snapshot.forEach(doc => {
+        snapshot.forEach((doc) => {
 
             const project = doc.data();
 
-            const technologies =
-                project.technologies || [];
+            const technologies = project.technologies || [];
 
-            const techBadges =
-                technologies.map(tech => `
+            const techBadges = technologies
+                .map(
+                    (tech) => `
                     <span class="tech-badge">
                         ${tech}
                     </span>
-                `).join("");
+                `
+                )
+                .join("");
 
             projectsGrid.innerHTML += `
-            
-                <div class="project-card">
+                <article class="project-card">
 
                     <div class="project-image">
+
                         <img
                             src="${project.imageUrl}"
-                            alt="${project.title}">
+                            alt="${project.name}"
+                            loading="lazy">
+
                     </div>
 
                     <div class="project-content">
 
                         <h3 class="project-title">
-                            ${project.title}
+                            ${project.name}
                         </h3>
 
                         <p class="project-description">
@@ -81,55 +82,33 @@ export async function initProjects() {
 
                         <div class="project-links">
 
-                            ${
-                                project.githubUrl
-                                    ? `
-                                    <a
-                                        href="${project.githubUrl}"
-                                        target="_blank"
-                                        class="project-btn github-btn">
+                            <a
+                                href="${project.projectUrl}"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="project-btn demo-btn">
 
-                                        <i class="fab fa-github"></i>
-                                        GitHub
-                                    </a>
-                                `
-                                    : ""
-                            }
+                                <i class="fas fa-arrow-up-right-from-square"></i>
+                                View Project
 
-                            ${
-                                project.liveDemoUrl
-                                    ? `
-                                    <a
-                                        href="${project.liveDemoUrl}"
-                                        target="_blank"
-                                        class="project-btn demo-btn">
-
-                                        <i class="fas fa-arrow-up-right-from-square"></i>
-                                        Live Demo
-                                    </a>
-                                `
-                                    : ""
-                            }
+                            </a>
 
                         </div>
 
                     </div>
 
-                </div>
-
+                </article>
             `;
         });
 
     } catch (error) {
 
-        console.error(
-            "Failed to load projects:",
-            error
-        );
+        console.error("Failed to load projects:", error);
 
         projectsGrid.innerHTML = `
             <div class="projects-empty">
-                Failed to load projects.
+                <h3>Unable to Load Projects</h3>
+                <p>Please try again later.</p>
             </div>
         `;
     }
