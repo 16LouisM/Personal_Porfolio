@@ -4,16 +4,9 @@ export function initializeTheme() {
     const themeToggle = document.querySelector("#theme-toggle");
     const themeIcon = document.querySelector("#theme-icon");
 
-    const savedTheme = localStorage.getItem("theme");
 
-    // 1. Detect system theme if no saved preference
-    const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? "dark"
-        : "light";
 
-    const initialTheme = savedTheme || systemTheme;
 
-    applyTheme(initialTheme);
 
     if (!themeToggle) return;
 
@@ -46,17 +39,4 @@ export function initializeTheme() {
             themeIcon.className = "fa-solid fa-moon";
         }
     }
-
-    // 5. Listen for system theme changes (LIVE SWITCH)
-    window.matchMedia("(prefers-color-scheme: dark)")
-        .addEventListener("change", (e) => {
-
-            // Only auto-switch if user has NOT manually set theme
-            const hasSaved = localStorage.getItem("theme");
-
-            if (hasSaved) return;
-
-            const newTheme = e.matches ? "dark" : "light";
-            applyTheme(newTheme);
-        });
 }
