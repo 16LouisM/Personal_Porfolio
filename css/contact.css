@@ -4,7 +4,7 @@
 .contact-section {
     position: relative;
     padding: 120px 20px 80px;
-    color: var(--text-color, #fff);
+    color: var(--text-color);
     background: transparent;
     overflow: hidden;
 }
@@ -44,7 +44,7 @@
     font-weight: 800;
     line-height: 1.15;
     margin-bottom: 12px;
-    color: var(--text-color, #fff);
+    color: var(--text-color);
 }
 
 .contact-section .section-header p {
@@ -53,6 +53,7 @@
     max-width: 700px;
     margin: 0 auto;
     line-height: 1.7;
+    color: var(--text-secondary);
 }
 
 /* =========================
@@ -78,23 +79,23 @@
     font-size: 1.2rem;
     font-weight: 700;
     margin-bottom: 10px;
-    color: var(--text-color, #fff);
+    color: var(--text-color);
 }
 
-/* Contact card – glass style (like stat/skill cards) */
+/* Contact card – glass style */
 .contact-card {
     position: relative;
     display: flex;
     align-items: center;
     gap: 16px;
     padding: 18px 20px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 16px;
+    background: var(--glass-bg, rgba(255, 255, 255, 0.03));
+    border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.06));
     -webkit-backdrop-filter: blur(4px);
     backdrop-filter: blur(4px);
     text-decoration: none;
-    color: var(--text-color, #fff);
+    color: var(--text-color);
     transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
                 box-shadow 0.35s ease,
                 border-color 0.3s ease,
@@ -102,7 +103,7 @@
     cursor: pointer;
 }
 
-/* Bottom accent bar (same as other cards) */
+/* Bottom accent bar */
 .contact-card::after {
     content: '';
     position: absolute;
@@ -118,10 +119,9 @@
 
 .contact-card:hover {
     transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.10),
-                0 0 30px rgba(0, 212, 255, 0.06);
-    border-color: rgba(0, 212, 255, 0.15);
-    background: rgba(255, 255, 255, 0.06);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+    border-color: var(--glass-hover-border, rgba(0, 212, 255, 0.15));
+    background: var(--glass-hover-bg, rgba(255, 255, 255, 0.06));
 }
 
 .contact-card:hover::after {
@@ -158,13 +158,13 @@
     font-weight: 500;
     opacity: 0.7;
     margin-bottom: 2px;
-    color: var(--text-color, #fff);
+    color: var(--text-secondary);
 }
 
 .contact-content p {
     font-size: 1.05rem;
     font-weight: 600;
-    color: var(--text-color, #fff);
+    color: var(--text-color);
 }
 
 /* Social links – glass style */
@@ -181,9 +181,9 @@
     width: 46px;
     height: 46px;
     border-radius: 12px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    color: var(--text-color, #fff);
+    background: var(--glass-bg, rgba(255, 255, 255, 0.03));
+    border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.06));
+    color: var(--text-color);
     font-size: 1.2rem;
     transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
                 background 0.3s ease,
@@ -208,7 +208,6 @@
     gap: 18px;
 }
 
-/* Form group */
 .form-group {
     display: flex;
     flex-direction: column;
@@ -218,20 +217,19 @@
 .form-group label {
     font-size: 0.9rem;
     font-weight: 500;
-    color: var(--text-color, #fff);
-    opacity: 0.8;
+    color: var(--text-secondary);
 }
 
-/* Inputs – glass style */
+/* Inputs – glass style with visible borders */
 .contact-form input,
 .contact-form textarea {
     padding: 14px 16px;
     border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    background: var(--input-bg, rgba(255, 255, 255, 0.04));
     -webkit-backdrop-filter: blur(4px);
     backdrop-filter: blur(4px);
-    color: var(--text-color, #fff);
+    color: var(--text-color);
     font-size: 1rem;
     font-family: inherit;
     transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
@@ -240,14 +238,15 @@
 
 .contact-form input::placeholder,
 .contact-form textarea::placeholder {
-    color: rgba(255, 255, 255, 0.3);
+    color: var(--text-secondary);
+    opacity: 0.5;
 }
 
 .contact-form input:focus,
 .contact-form textarea:focus {
     border-color: #00d4ff;
     box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.08);
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--input-focus-bg, rgba(255, 255, 255, 0.06));
 }
 
 .contact-form textarea {
@@ -281,7 +280,7 @@
 }
 
 /* =========================
-   RESPONSIVE – matches other sections
+   RESPONSIVE
 ========================= */
 @media (max-width: 900px) {
     .contact-section {
@@ -338,58 +337,24 @@
 }
 
 /* =========================
-   LIGHT THEME OVERRIDES
+   THEME CUSTOM PROPERTIES (Light & Dark)
 ========================= */
-[data-theme="light"] .contact-card {
-    background: rgba(255, 255, 255, 0.50);
-    border-color: rgba(0, 0, 0, 0.04);
+/* Default (light) glass variables */
+:root {
+    --glass-bg: rgba(255, 255, 255, 0.50);
+    --glass-border: rgba(0, 0, 0, 0.08);
+    --glass-hover-bg: rgba(255, 255, 255, 0.75);
+    --glass-hover-border: rgba(0, 212, 255, 0.20);
+    --input-bg: rgba(255, 255, 255, 0.60);
+    --input-focus-bg: rgba(255, 255, 255, 0.80);
 }
 
-[data-theme="light"] .contact-card:hover {
-    background: rgba(255, 255, 255, 0.75);
-    border-color: rgba(0, 212, 255, 0.20);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06),
-                0 0 30px rgba(0, 212, 255, 0.05);
-}
-
-[data-theme="light"] .contact-icon {
-    background: rgba(0, 212, 255, 0.06);
-}
-
-[data-theme="light"] .social-links a {
-    background: rgba(255, 255, 255, 0.30);
-    border-color: rgba(0, 0, 0, 0.04);
-    color: #1a1a2e;
-}
-
-[data-theme="light"] .social-links a:hover {
-    background: rgba(0, 212, 255, 0.10);
-    border-color: rgba(0, 212, 255, 0.20);
-    color: #0099b5;
-}
-
-[data-theme="light"] .contact-form input,
-[data-theme="light"] .contact-form textarea {
-    background: rgba(255, 255, 255, 0.40);
-    border-color: rgba(0, 0, 0, 0.06);
-    color: #1a1a2e;
-}
-
-[data-theme="light"] .contact-form input::placeholder,
-[data-theme="light"] .contact-form textarea::placeholder {
-    color: rgba(0, 0, 0, 0.3);
-}
-
-[data-theme="light"] .contact-form input:focus,
-[data-theme="light"] .contact-form textarea:focus {
-    background: rgba(255, 255, 255, 0.70);
-    border-color: #00d4ff;
-}
-
-[data-theme="light"] .contact-form button {
-    background: linear-gradient(135deg, #00bcd4, #0099b5);
-}
-
-[data-theme="light"] .form-group label {
-    color: #1a1a2e;
+/* Dark theme overrides */
+[data-theme="dark"] {
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.06);
+    --glass-hover-bg: rgba(255, 255, 255, 0.06);
+    --glass-hover-border: rgba(0, 212, 255, 0.15);
+    --input-bg: rgba(255, 255, 255, 0.04);
+    --input-focus-bg: rgba(255, 255, 255, 0.06);
 }
