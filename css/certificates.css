@@ -4,7 +4,7 @@
 .certificates-section {
     position: relative;
     padding: 120px 20px 80px;
-    color: var(--text-color, #fff);
+    color: var(--text-color);
     background: transparent;
     overflow: hidden;
 }
@@ -44,7 +44,7 @@
     font-weight: 800;
     line-height: 1.15;
     margin-bottom: 12px;
-    color: var(--text-color, #fff);
+    color: var(--text-color);
 }
 
 .certificates-section .section-header p {
@@ -53,6 +53,7 @@
     max-width: 700px;
     margin: 0 auto;
     line-height: 1.7;
+    color: var(--text-secondary);
 }
 
 /* =========================
@@ -70,8 +71,8 @@
 ========================= */
 .certificate-card {
     position: relative;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: var(--cert-card-bg);
+    border: 1px solid var(--cert-card-border);
     border-radius: 16px;
     overflow: hidden;
     -webkit-backdrop-filter: blur(4px);
@@ -102,10 +103,9 @@
 
 .certificate-card:hover {
     transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.10),
-                0 0 30px rgba(0, 212, 255, 0.06);
-    border-color: rgba(0, 212, 255, 0.15);
-    background: rgba(255, 255, 255, 0.06);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.10);
+    border-color: var(--cert-card-hover-border);
+    background: var(--cert-card-hover-bg);
 }
 
 .certificate-card:hover::after {
@@ -150,13 +150,13 @@
     font-size: 1.1rem;
     font-weight: 700;
     margin-bottom: 4px;
-    color: var(--text-color, #fff);
+    color: var(--text-color);
 }
 
 .certificate-content .issuer {
     font-size: 0.85rem;
     opacity: 0.7;
-    color: var(--text-color, #fff);
+    color: var(--text-secondary);
     margin-bottom: 8px;
 }
 
@@ -164,7 +164,7 @@
     font-size: 0.9rem;
     opacity: 0.8;
     line-height: 1.5;
-    color: var(--text-color, #fff);
+    color: var(--text-color);
     flex: 1;
 }
 
@@ -223,21 +223,6 @@
 }
 
 /* =========================
-   LIGHT THEME OVERRIDES (matches stats/skills/projects)
-========================= */
-[data-theme="light"] .certificate-card {
-    background: rgba(255, 255, 255, 0.50);
-    border-color: rgba(0, 0, 0, 0.04);
-}
-
-[data-theme="light"] .certificate-card:hover {
-    background: rgba(255, 255, 255, 0.75);
-    border-color: rgba(0, 212, 255, 0.20);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06),
-                0 0 30px rgba(0, 212, 255, 0.05);
-}
-
-/* =========================
    MODAL – glass style (matches projects modal)
 ========================= */
 .certificate-modal {
@@ -265,9 +250,9 @@
 
 /* Modal content (glass box) */
 .certificate-modal .modal-content {
-    background: rgba(20, 20, 20, 0.65);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    color: var(--text-color, #fff);
+    background: var(--modal-bg);
+    border: 1px solid var(--modal-border);
+    color: var(--text-color);
     width: 90%;
     max-width: 800px;
     max-height: 90vh;
@@ -298,7 +283,7 @@
     right: 20px;
     font-size: 28px;
     cursor: pointer;
-    color: var(--text-color, #fff);
+    color: var(--text-color);
     background: none;
     border: none;
     transition: transform 0.3s ease;
@@ -315,12 +300,12 @@
     border-radius: 12px;
     object-fit: contain;
     margin-bottom: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--modal-border);
 }
 
 /* Modal info text */
 .certificate-modal .modal-info {
-    color: var(--text-color, #fff);
+    color: var(--text-color);
 }
 
 .certificate-modal .modal-info h3 {
@@ -331,20 +316,36 @@
 .certificate-modal .modal-info .issuer {
     opacity: 0.7;
     margin-bottom: 10px;
+    color: var(--text-secondary);
 }
 
 .certificate-modal .modal-info .description {
     opacity: 0.85;
     line-height: 1.6;
+    color: var(--text-color);
 }
 
-/* Light theme for modal */
-[data-theme="light"] .certificate-modal .modal-content {
-    background: rgba(255, 255, 255, 0.80);
-    border-color: rgba(0, 0, 0, 0.06);
-    color: #1a1a2e;
+/* =========================
+   THEME CUSTOM PROPERTIES (Light & Dark)
+========================= */
+/* Default (light) variables */
+:root {
+    --cert-card-bg: rgba(255, 255, 255, 0.50);
+    --cert-card-border: rgba(0, 0, 0, 0.04);
+    --cert-card-hover-bg: rgba(255, 255, 255, 0.75);
+    --cert-card-hover-border: rgba(0, 212, 255, 0.20);
+
+    --modal-bg: rgba(255, 255, 255, 0.80);
+    --modal-border: rgba(0, 0, 0, 0.06);
 }
 
-[data-theme="light"] .certificate-modal .close-modal {
-    color: #1a1a2e;
+/* Dark theme overrides */
+[data-theme="dark"] {
+    --cert-card-bg: rgba(255, 255, 255, 0.03);
+    --cert-card-border: rgba(255, 255, 255, 0.06);
+    --cert-card-hover-bg: rgba(255, 255, 255, 0.06);
+    --cert-card-hover-border: rgba(0, 212, 255, 0.15);
+
+    --modal-bg: rgba(20, 20, 20, 0.65);
+    --modal-border: rgba(255, 255, 255, 0.08);
 }
