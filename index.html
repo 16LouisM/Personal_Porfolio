@@ -231,12 +231,47 @@
         <section id="contact" class="contact-section">
             <div class="container">
 
-                <h2 class="section-title">Contact Me</h2>
-
-                <div id="contact-content">
-                    <!-- Firebase contact info -->
+                <div class="section-header">
+                    <h2>Contact Me</h2>
+                    <p>Let’s connect and build something great</p>
                 </div>
 
+                <div class="contact-wrapper">
+
+                    <!-- Contact Info -->
+                    <div class="contact-info">
+                        <h3>Contact Information</h3>
+
+                        <div class="info-item">
+                            <i class="fas fa-envelope"></i>
+                            <span id="contact-email">loading...</span>
+                        </div>
+
+                        <div class="info-item">
+                            <i class="fas fa-phone"></i>
+                            <span id="contact-phone">loading...</span>
+                        </div>
+
+                        <div class="info-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span id="contact-location">loading...</span>
+                        </div>
+
+                        <!-- Social Links -->
+                        <div class="social-links" id="social-links">
+                            <!-- dynamically loaded -->
+                        </div>
+                    </div>
+
+                    <!-- Contact Form -->
+                    <form class="contact-form" id="contactForm">
+                        <input type="text" id="name" placeholder="Your Name" required>
+                        <input type="email" id="email" placeholder="Your Email" required>
+                        <textarea id="message" placeholder="Your Message" required></textarea>
+                        <button type="submit">Send Message</button>
+                    </form>
+
+                </div>
             </div>
         </section>
 

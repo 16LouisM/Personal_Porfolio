@@ -9,6 +9,7 @@ import { initAboutPage } from "./pages/about.js";
 import { initSkills } from "./pages/skills.js";
 import { initProjects } from "./pages/projects.js";
 import { initCertificates } from "./pages/certificates.js";
+import { initContact } from "./pages/contact.js";
 // ======================
 // INIT APP AFTER DOM READY
 // ======================
@@ -56,11 +57,18 @@ window.addEventListener("DOMContentLoaded", async () => {
     }
 
     // PROJECTS
-        try {
-            await initProjects();
-        } catch (error) {
-            console.error("Projects failed:", error);
-        }
+    try {
+        await initProjects();
+    } catch (error) {
+        console.error("Projects failed:", error);
+    }
+
+    // CONTACT
+    try {
+        await initContact();
+    } catch (error) {
+        console.error("Contact failed:", error);
+    }
     // COUNTERS
     initializeCounters();
 });
