@@ -4,11 +4,11 @@
 .footer {
     position: relative;
     padding: 40px 20px 30px;
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--footer-bg);
     -webkit-backdrop-filter: blur(8px);
     backdrop-filter: blur(8px);
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
-    color: var(--text-color, #fff);
+    border-top: 1px solid var(--footer-border);
+    color: var(--text-color);
     text-align: center;
     transition: background 0.3s ease, border-color 0.3s ease;
 }
@@ -37,9 +37,9 @@
     width: 52px;
     height: 52px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    color: var(--text-color, #fff);
+    background: var(--social-bg);
+    border: 1px solid var(--social-border);
+    color: var(--text-color);
     font-size: 1.3rem;
     text-decoration: none;
     transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
@@ -54,10 +54,10 @@
 
 .footer-socials a:hover {
     transform: translateY(-6px) scale(1.05);
-    background: rgba(0, 212, 255, 0.08);
-    border-color: rgba(0, 212, 255, 0.15);
+    background: var(--social-hover-bg);
+    border-color: var(--social-hover-border);
     box-shadow: 0 8px 24px rgba(0, 212, 255, 0.10);
-    color: #00d4ff;
+    color: var(--social-hover-color);
 }
 
 /* =========================
@@ -66,7 +66,7 @@
 .footer-text {
     font-size: 0.95rem;
     opacity: 0.7;
-    color: var(--text-color, #fff);
+    color: var(--text-color);
     margin: 0;
     letter-spacing: 0.3px;
 }
@@ -101,7 +101,6 @@
         width: 44px;
         height: 44px;
         font-size: 1.1rem;
-        gap: 12px;
     }
 
     .footer-text {
@@ -122,26 +121,25 @@
 }
 
 /* =========================
-   LIGHT THEME OVERRIDES
+   THEME VARIABLES (Light & Dark)
 ========================= */
-[data-theme="light"] .footer {
-    background: rgba(255, 255, 255, 0.50);
-    border-top-color: rgba(0, 0, 0, 0.04);
+:root {
+    /* Light theme defaults */
+    --footer-bg: rgba(255, 255, 255, 0.50);
+    --footer-border: rgba(0, 0, 0, 0.04);
+    --social-bg: rgba(255, 255, 255, 0.30);
+    --social-border: rgba(0, 0, 0, 0.04);
+    --social-hover-bg: rgba(0, 212, 255, 0.08);
+    --social-hover-border: rgba(0, 212, 255, 0.20);
+    --social-hover-color: #0099b5;
 }
 
-[data-theme="light"] .footer-socials a {
-    background: rgba(255, 255, 255, 0.30);
-    border-color: rgba(0, 0, 0, 0.04);
-    color: #1a1a2e;
-}
-
-[data-theme="light"] .footer-socials a:hover {
-    background: rgba(0, 212, 255, 0.08);
-    border-color: rgba(0, 212, 255, 0.20);
-    color: #0099b5;
-    box-shadow: 0 8px 24px rgba(0, 212, 255, 0.06);
-}
-
-[data-theme="light"] .footer-text {
-    color: #1a1a2e;
+[data-theme="dark"] {
+    --footer-bg: rgba(255, 255, 255, 0.03);
+    --footer-border: rgba(255, 255, 255, 0.06);
+    --social-bg: rgba(255, 255, 255, 0.03);
+    --social-border: rgba(255, 255, 255, 0.06);
+    --social-hover-bg: rgba(0, 212, 255, 0.08);
+    --social-hover-border: rgba(0, 212, 255, 0.15);
+    --social-hover-color: #00d4ff;
 }
