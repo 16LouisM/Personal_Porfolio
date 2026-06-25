@@ -10,6 +10,7 @@ import {
 ========================= */
 
 export async function initContact() {
+
     const docRef = doc(db, "contactInfo", "main");
     const docSnap = await getDoc(docRef);
 
@@ -20,20 +21,18 @@ export async function initContact() {
 
     const data = docSnap.data();
 
-    // Fill contact info
-    document.getElementById("contact-email").textContent = data.email;
-    document.getElementById("contact-phone").textContent = data.phone;
-    document.getElementById("contact-location").textContent = data.location;
+    document.getElementById("contact-email").textContent =
+        data.email || "Not Available";
 
-    // Social links
-    const socialContainer = document.getElementById("social-links");
-    socialContainer.innerHTML = "";
+    document.getElementById("contact-location").textContent =
+        data.location || "Not Available";
 
-    for (const key in data.socials) {
-        const a = document.createElement("a");
-        a.href = data.socials[key];
-        a.target = "_blank";
-        a.innerHTML = `<i class="fab fa-${key}"></i>`;
-        socialContainer.appendChild(a);
-    }
+    document.getElementById("email-card").href =
+        `mailto:${data.email}`;
+
+    document.getElementById("linkedin-card").href =
+        data.linkedin || "#";
+
+    document.getElementById("github-card").href =
+        data.github || "#";
 }
