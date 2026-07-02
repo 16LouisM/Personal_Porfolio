@@ -202,6 +202,8 @@ function renderGallery(project) {
     currentImageIndex = 0;
 
     let startX = 0;
+    let startY = 0;
+    let moved = false;
 
     images.forEach(img => {
 
@@ -211,25 +213,77 @@ function renderGallery(project) {
         image.loading = "lazy";
         image.style.cursor = "zoom-in";
 
-        image.addEventListener("click", () => {
+        // reset per image interaction
+        let isPointerDown = false;
+
+        /* -------------------------
+           POINTER DOWN (works for mouse + touch)
+        ------------------------- */
+        image.addEventListener("pointerdown", (e) => {
+            isPointerDown = true;
+            moved = false;
+
+            startX = e.clientX;
+            startY = e.clientY;
+        });
+
+        /* -------------------------
+           POINTER MOVE (detect swipe/scroll)
+        ------------------------- */
+        image.addEventListener("pointermove", (e) => {
+            if (!isPointerDown) return;
+
+            const dx = Math.abs(e.clientX - startX);
+            const dy = Math.abs(e.clientY - startY);
+
+            if (dx > 10 || dy > 10) {
+                moved = true;
+            }
+        });
+
+        /* -------------------------
+           POINTER END
+        ------------------------- */
+        image.addEventListener("pointerup", () => {
+            isPointerDown = false;
+
+            // reset after interaction
+            setTimeout(() => {
+                moved = false;
+            }, 80);
+        });
+
+        /* -------------------------
+           CLICK (ONLY REAL TAPS)
+        ------------------------- */
+        image.addEventListener("click", (e) => {
+
+            // 🚫 block if user moved finger (swipe/scroll)
+            if (moved) {
+                e.preventDefault();
+                e.stopPropagation();
+                return;
+            }
+
             openImageZoom(img);
         });
 
         gallery.appendChild(image);
     });
 
-    /* SWIPE */
-    gallery.addEventListener("touchstart", (e) => {
-        startX = e.touches[0].clientX;
+    /* -------------------------
+       SWIPE BETWEEN IMAGES (gallery level)
+    ------------------------- */
+    gallery.addEventListener("pointerdown", (e) => {
+        startX = e.clientX;
     });
 
-    gallery.addEventListener("touchend", (e) => {
+    gallery.addEventListener("pointerup", (e) => {
 
-        const endX = e.changedTouches[0].clientX;
+        const endX = e.clientX;
         const diff = startX - endX;
 
         if (Math.abs(diff) > 50) {
-
             if (diff > 0) nextImage(images);
             else prevImage(images);
         }
