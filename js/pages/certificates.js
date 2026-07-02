@@ -56,7 +56,11 @@ function renderCertificate(cert) {
 
         <div class="certificate-content">
             <h3>${cert.title}</h3>
+
             <p class="issuer">${cert.issuer}</p>
+
+            ${cert.Date ? `<p class="date">${cert.Date}</p>` : ""}
+
             <p class="description">${cert.description}</p>
         </div>
     `;
@@ -76,6 +80,16 @@ function openModal(cert) {
     modalImg.src = cert.imageURL;
     modalTitle.textContent = cert.title;
     modalDesc.textContent = cert.description;
+
+    // NEW: add issuer + date support
+    const modalInfo = document.querySelector(".modal-info");
+
+    modalInfo.innerHTML = `
+        <h3>${cert.title}</h3>
+        <p class="issuer">${cert.issuer}</p>
+        ${cert.Date ? `<p class="date">Issued: ${cert.Date}</p>` : ""}
+        <p class="description">${cert.description}</p>
+    `;
 
     modal.classList.add("show");
 }
