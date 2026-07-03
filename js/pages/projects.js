@@ -15,6 +15,9 @@ let modal;
 let zoomOverlay;
 let zoomImage;
 
+let isScrolling = false;
+let scrollTimeout;
+
 let currentProjects = [];
 let currentProjectIndex = 0;
 let currentImageIndex = 0;
@@ -203,7 +206,25 @@ function renderGallery(project) {
 
     let startX = 0;
     let startY = 0;
+
     let moved = false;
+
+    let interactionLock = false;
+    let lockTimeout;
+
+    let pointerStartTime = 0;
+
+    // IMPORTANT: reset lock when rendering new gallery
+    interactionLock = false;
+
+    function lockInteraction() {
+        interactionLock = true;
+        clearTimeout(lockTimeout);
+
+        lockTimeout = setTimeout(() => {
+            interactionLock = false;
+        }, 250);
+    }
 
     images.forEach(img => {
 
@@ -213,53 +234,40 @@ function renderGallery(project) {
         image.loading = "lazy";
         image.style.cursor = "zoom-in";
 
-        // reset per image interaction
-        let isPointerDown = false;
-
-        /* -------------------------
-           POINTER DOWN (works for mouse + touch)
-        ------------------------- */
+        /* =========================
+           POINTER DOWN
+        ========================= */
         image.addEventListener("pointerdown", (e) => {
-            isPointerDown = true;
             moved = false;
+
+            pointerStartTime = Date.now();
 
             startX = e.clientX;
             startY = e.clientY;
         });
 
-        /* -------------------------
-           POINTER MOVE (detect swipe/scroll)
-        ------------------------- */
+        /* =========================
+           POINTER MOVE
+        ========================= */
         image.addEventListener("pointermove", (e) => {
-            if (!isPointerDown) return;
 
             const dx = Math.abs(e.clientX - startX);
             const dy = Math.abs(e.clientY - startY);
 
-            if (dx > 10 || dy > 10) {
+            if (dx > 8 || dy > 8) {
                 moved = true;
             }
         });
 
-        /* -------------------------
-           POINTER END
-        ------------------------- */
-        image.addEventListener("pointerup", () => {
-            isPointerDown = false;
-
-            // reset after interaction
-            setTimeout(() => {
-                moved = false;
-            }, 80);
-        });
-
-        /* -------------------------
-           CLICK (ONLY REAL TAPS)
-        ------------------------- */
+        /* =========================
+           CLICK (SAFE ZOOM)
+        ========================= */
         image.addEventListener("click", (e) => {
 
-            // 🚫 block if user moved finger (swipe/scroll)
-            if (moved) {
+            const clickDuration = Date.now() - pointerStartTime;
+
+            // 🚫 HARD BLOCK ALL ACCIDENTAL TRIGGERS
+            if (moved || interactionLock || clickDuration > 250) {
                 e.preventDefault();
                 e.stopPropagation();
                 return;
@@ -271,14 +279,26 @@ function renderGallery(project) {
         gallery.appendChild(image);
     });
 
-    /* -------------------------
-       SWIPE BETWEEN IMAGES (gallery level)
-    ------------------------- */
+    /* =========================
+       SCROLL DETECTION (CRITICAL FIX)
+    ========================= */
+    gallery.addEventListener("scroll", lockInteraction, { passive: true });
+
+    /* =========================
+       WHEEL DETECTION (DESKTOP FIX)
+    ========================= */
+    gallery.addEventListener("wheel", lockInteraction, { passive: true });
+
+    /* =========================
+       POINTER DOWN ON GALLERY (SWIPE)
+    ========================= */
     gallery.addEventListener("pointerdown", (e) => {
         startX = e.clientX;
     });
 
     gallery.addEventListener("pointerup", (e) => {
+
+        if (interactionLock) return;
 
         const endX = e.clientX;
         const diff = startX - endX;
