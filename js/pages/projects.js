@@ -11,6 +11,9 @@ import {
    GLOBAL STATE
 ========================= */
 
+const INITIAL_PROJECT_COUNT = 4;
+let showingAllProjects = false;
+
 let modal;
 let zoomOverlay;
 let zoomImage;
@@ -55,15 +58,30 @@ export async function initProjects() {
         }
 
         snapshot.forEach((doc) => {
-            const project = doc.data();
-
-            currentProjects.push(project);
-
-            const index = currentProjects.length - 1;
-
-            const card = createProjectCard(project, index);
-            projectsGrid.appendChild(card);
+            currentProjects.push(doc.data());
         });
+
+        renderProjects();
+
+        const toggleBtn = document.getElementById("toggleProjectsBtn");
+
+        toggleBtn.onclick = () => {
+
+            showingAllProjects = !showingAllProjects;
+
+            renderProjects();
+
+            if (!showingAllProjects) {
+
+                document
+                    .getElementById("projects")
+                    .scrollIntoView({
+                        behavior: "smooth",
+                        block: "start"
+                    });
+
+            }
+        };
 
     } catch (err) {
         console.error("Failed to load projects:", err);
@@ -124,6 +142,43 @@ function createProjectCard(project, index) {
         });
 
     return card;
+}
+
+function renderProjects() {
+
+    const projectsGrid = document.getElementById("projects-grid");
+    const toggleBtn = document.getElementById("toggleProjectsBtn");
+
+    projectsGrid.innerHTML = "";
+
+    const visibleProjects = showingAllProjects
+        ? currentProjects
+        : currentProjects.slice(0, INITIAL_PROJECT_COUNT);
+
+    visibleProjects.forEach((project, index) => {
+
+        // Find the original index
+        const originalIndex = currentProjects.indexOf(project);
+
+        const card = createProjectCard(project, originalIndex);
+
+        projectsGrid.appendChild(card);
+    });
+
+    // Show button only if more than 4 projects
+    if (currentProjects.length > INITIAL_PROJECT_COUNT) {
+
+        toggleBtn.hidden = false;
+
+        toggleBtn.textContent = showingAllProjects
+            ? "Show Less"
+            : "View All Projects";
+
+    } else {
+
+        toggleBtn.hidden = true;
+
+    }
 }
 
 /* =========================

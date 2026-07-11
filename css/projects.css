@@ -502,3 +502,31 @@
    LIGHT THEME OVERRIDES (handled by variables above)
    Removed duplicate [data-theme="light"] overrides since variables handle it.
 ========================= */
+
+/* =========================
+   VIEW ALL PROJECTS
+========================= */
+
+.projects-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+.view-projects-btn {
+    padding: 14px 34px;
+    border: none;
+    border-radius: 50px;
+    background: #00bcd4;
+    color: white;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .3s ease;
+}
+
+.view-projects-btn:hover {
+    background: #0099b5;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0,188,212,.3);
+}
