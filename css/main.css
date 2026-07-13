@@ -12,6 +12,18 @@ html {
     scroll-behavior: smooth;
 }
 
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
 /* =========================
    Base Styles
 ========================= */
@@ -46,6 +58,14 @@ button {
     font-family: inherit;
 }
 
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
 /* =========================
    Layout
 ========================= */
@@ -76,11 +96,11 @@ h6 {
 }
 
 h1 {
-    font-size: 3.5rem;
+    font-size: clamp(2.25rem, 4vw + 1rem, 3.5rem);
 }
 
 h2 {
-    font-size: 2.5rem;
+    font-size: clamp(1.75rem, 3vw + 1rem, 2.5rem);
 }
 
 p {
@@ -96,25 +116,27 @@ p {
     padding: 12px 24px;
     border-radius: 8px;
     font-weight: 600;
-    transition: 0.3s ease;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
 .btn-primary {
-    background: #00bcd4;
+    background: var(--accent);
     color: white;
 }
 
 .btn-primary:hover {
+    background: var(--accent-dark);
     transform: translateY(-2px);
 }
 
 .btn-secondary {
-    border: 2px solid #00bcd4;
-    color: #00bcd4;
+    border: 2px solid var(--accent);
+    color: var(--accent);
 }
 
 .btn-secondary:hover {
-    background: #00bcd4;
+    background: var(--accent);
     color: white;
 }
 
@@ -125,5 +147,57 @@ p {
 .section-title {
     text-align: center;
     margin-bottom: 3rem;
-    font-size: 2.5rem;
+    font-size: clamp(1.75rem, 3vw + 1rem, 2.5rem);
+}
+
+/* =========================
+   Section Header (shared)
+   Previously duplicated verbatim in about.css, skills.css,
+   projects.css, certificates.css and contact.css. Consolidated
+   here so every section stays visually in sync automatically.
+========================= */
+
+.section-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.section-header .badge {
+    display: inline-block;
+    padding: 6px 18px;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: rgba(var(--accent-rgb), 0.12);
+    color: var(--accent);
+    border: 1px solid rgba(var(--accent-rgb), 0.15);
+    margin-bottom: 14px;
+}
+
+.section-header h1,
+.section-header h2 {
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 12px;
+    color: var(--text-color);
+}
+
+.section-header .subtitle,
+.section-header p {
+    font-size: 1.1rem;
+    opacity: 0.7;
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.7;
+    color: var(--text-secondary);
+}
+
+@media (max-width: 400px) {
+    .section-header h1,
+    .section-header h2 {
+        font-size: 1.6rem;
+    }
 }

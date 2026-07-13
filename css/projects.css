@@ -18,45 +18,6 @@
 }
 
 /* =========================
-   SECTION HEADER (matches about/skills)
-========================= */
-.projects-section .section-header {
-    text-align: center;
-    margin-bottom: 50px;
-}
-
-.projects-section .section-header .badge {
-    display: inline-block;
-    padding: 6px 18px;
-    border-radius: 50px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    background: rgba(0, 188, 212, 0.12);
-    color: #00bcd4;
-    border: 1px solid rgba(0, 188, 212, 0.15);
-    margin-bottom: 14px;
-}
-
-.projects-section .section-header h2 {
-    font-size: clamp(2rem, 5vw, 3.2rem);
-    font-weight: 800;
-    line-height: 1.15;
-    margin-bottom: 12px;
-    color: var(--text-color);
-}
-
-.projects-section .section-header p {
-    font-size: 1.1rem;
-    opacity: 0.7;
-    max-width: 700px;
-    margin: 0 auto;
-    line-height: 1.7;
-    color: var(--text-secondary);
-}
-
-/* =========================
    PROJECTS GRID
 ========================= */
 .projects-grid {
@@ -67,12 +28,12 @@
 }
 
 /* =========================
-   PROJECT CARD – glass style (matches .stat-card)
+   PROJECT CARD – glass style (matches .stat-card / .skill-category)
 ========================= */
 .project-card {
     position: relative;
-    background: var(--stat-bg);
-    border: 1px solid var(--stat-border);
+    background: var(--glass-card-bg);
+    border: 1px solid var(--glass-card-border);
     border-radius: 16px;
     overflow: hidden;
     -webkit-backdrop-filter: blur(4px);
@@ -95,7 +56,7 @@
     left: 30%;
     right: 30%;
     height: 2px;
-    background: #00bcd4;
+    background: var(--accent);
     border-radius: 4px;
     opacity: 0;
     transition: opacity 0.4s ease, left 0.4s ease, right 0.4s ease;
@@ -104,8 +65,8 @@
 .project-card:hover {
     transform: translateY(-8px) scale(1.02);
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.10);
-    border-color: var(--stat-hover-border);
-    background: var(--stat-hover-bg);
+    border-color: var(--glass-card-hover-border);
+    background: var(--glass-card-hover-bg);
 }
 
 .project-card:hover::after {
@@ -177,9 +138,9 @@
     border-radius: 50px;
     font-size: 0.75rem;
     font-weight: 600;
-    background: rgba(0, 188, 212, 0.08);
-    color: #00bcd4;
-    border: 1px solid rgba(0, 188, 212, 0.10);
+    background: rgba(var(--accent-rgb), 0.08);
+    color: var(--accent);
+    border: 1px solid rgba(var(--accent-rgb), 0.10);
     letter-spacing: 0.3px;
 }
 
@@ -200,34 +161,34 @@
     text-decoration: none;
     font-weight: 600;
     font-size: 0.85rem;
-    transition: all 0.3s ease;
+    transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
     cursor: pointer;
     border: none;
 }
 
 .github-btn {
     background: transparent;
-    border: 1px solid var(--border-color, rgba(255,255,255,0.12));
+    border: 1px solid var(--border-color);
     color: var(--text-color);
 }
 
 .github-btn:hover {
     background: rgba(255, 255, 255, 0.05);
-    border-color: var(--border-color-hover, rgba(255,255,255,0.25));
+    border-color: var(--border-color-hover);
     transform: translateY(-2px);
 }
 
 .demo-btn {
-    background: #00bcd4;
+    background: var(--accent);
     color: #fff;
-    border: 1px solid #00bcd4;
+    border: 1px solid var(--accent);
 }
 
 .demo-btn:hover {
-    background: #0099b5;
-    border-color: #0099b5;
+    background: var(--accent-dark);
+    border-color: var(--accent-dark);
     transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(0, 188, 212, 0.25);
+    box-shadow: 0 4px 15px rgba(var(--accent-rgb), 0.25);
 }
 
 /* =========================
@@ -316,8 +277,8 @@
 }
 
 .modal-content {
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
+    background: var(--glass-modal-bg);
+    border: 1px solid var(--glass-modal-border);
     color: var(--text-color);
     width: 90%;
     max-width: 900px;
@@ -330,7 +291,7 @@
     backdrop-filter: blur(18px);
     transform: scale(0.95);
     opacity: 0;
-    transition: all 0.3s ease;
+    transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 .modal-overlay.show .modal-content {
@@ -379,8 +340,8 @@
 }
 
 .tech-stack span {
-    background: rgba(0, 188, 212, 0.12);
-    color: #00bcd4;
+    background: rgba(var(--accent-rgb), 0.12);
+    color: var(--accent);
     padding: 4px 12px;
     border-radius: 20px;
     font-size: 0.8rem;
@@ -473,35 +434,12 @@
     to { background-position: -200% 0; }
 }
 
-/* =========================
-   THEME VARIABLES (fallbacks – defined in root)
-========================= */
-:root {
-    --stat-bg: rgba(255, 255, 255, 0.50);
-    --stat-border: rgba(0, 0, 0, 0.04);
-    --stat-hover-bg: rgba(255, 255, 255, 0.75);
-    --stat-hover-border: rgba(0, 188, 212, 0.20);
-    --glass-bg: rgba(255, 255, 255, 0.80);
-    --glass-border: rgba(0, 0, 0, 0.06);
-    --border-color: rgba(0, 0, 0, 0.08);
-    --border-color-hover: rgba(0, 0, 0, 0.15);
+@media (prefers-reduced-motion: reduce) {
+    .img-skeleton,
+    .project-skeleton {
+        animation: none;
+    }
 }
-
-[data-theme="dark"] {
-    --stat-bg: rgba(255, 255, 255, 0.03);
-    --stat-border: rgba(255, 255, 255, 0.06);
-    --stat-hover-bg: rgba(255, 255, 255, 0.06);
-    --stat-hover-border: rgba(0, 188, 212, 0.15);
-    --glass-bg: rgba(20, 20, 20, 0.65);
-    --glass-border: rgba(255, 255, 255, 0.08);
-    --border-color: rgba(255, 255, 255, 0.12);
-    --border-color-hover: rgba(255, 255, 255, 0.25);
-}
-
-/* =========================
-   LIGHT THEME OVERRIDES (handled by variables above)
-   Removed duplicate [data-theme="light"] overrides since variables handle it.
-========================= */
 
 /* =========================
    VIEW ALL PROJECTS
@@ -517,16 +455,16 @@
     padding: 14px 34px;
     border: none;
     border-radius: 50px;
-    background: #00bcd4;
+    background: var(--accent);
     color: white;
     font-size: 0.95rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all .3s ease;
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .view-projects-btn:hover {
-    background: #0099b5;
+    background: var(--accent-dark);
     transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(0,188,212,.3);
+    box-shadow: 0 10px 25px rgba(var(--accent-rgb), 0.3);
 }
