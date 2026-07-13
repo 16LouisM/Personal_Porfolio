@@ -45,8 +45,8 @@ async function loadAboutText() {
         document.getElementById("journey-image");
 
     if (aboutText) {
-        aboutText.textContent =
-            data.text || "";
+        // Use replaceAll for clearer intent and to satisfy linting rule
+        aboutText.innerHTML = (data.text || "").replaceAll("\n", "<br>");
     }
 
     if (journeyImage) {
