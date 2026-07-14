@@ -29,12 +29,56 @@ html {
 ========================= */
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
+    position: relative;
+    font-family: var(--font-body);
     background: var(--background-color);
     color: var(--text-color);
     line-height: 1.6;
     overflow-x: hidden;
     transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* Subtle dot-grid texture — a quiet technical signature behind every
+   section rather than a flat background. Fixed so it doesn't scroll
+   with content, sits behind everything, ignores clicks. */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(currentColor 1px, transparent 1px);
+    background-size: 28px 28px;
+    color: var(--text-color);
+    opacity: 0.04;
+    pointer-events: none;
+    z-index: 0;
+}
+
+main, .navbar, .footer {
+    position: relative;
+    z-index: 1;
+}
+
+::selection {
+    background: var(--accent);
+    color: #fff;
+}
+
+/* Custom scrollbar (WebKit) */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(var(--accent-rgb), 0.4);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent);
 }
 
 img {
@@ -91,7 +135,9 @@ h3,
 h4,
 h5,
 h6 {
+    font-family: var(--font-display);
     line-height: 1.2;
+    letter-spacing: -0.02em;
     margin-bottom: 1rem;
 }
 
@@ -112,27 +158,41 @@ p {
 ========================= */
 
 .btn {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     padding: 12px 24px;
-    border-radius: 8px;
+    border-radius: 50px;
     font-weight: 600;
+    font-family: var(--font-body);
     cursor: pointer;
-    transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn::after {
+    content: '\2192';
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.btn:hover::after {
+    transform: translateX(3px);
 }
 
 .btn-primary {
-    background: var(--accent);
+    background: var(--accent-gradient);
     color: white;
 }
 
 .btn-primary:hover {
-    background: var(--accent-dark);
+    box-shadow: 0 8px 20px rgba(var(--accent-rgb), 0.3);
     transform: translateY(-2px);
 }
 
 .btn-secondary {
     border: 2px solid var(--accent);
     color: var(--accent);
+    background: transparent;
 }
 
 .btn-secondary:hover {
@@ -162,18 +222,26 @@ p {
     margin-bottom: 50px;
 }
 
-.section-header .badge {
-    display: inline-block;
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     padding: 6px 18px;
     border-radius: 50px;
+    font-family: var(--font-mono);
     font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: none;
     background: rgba(var(--accent-rgb), 0.12);
     color: var(--accent);
     border: 1px solid rgba(var(--accent-rgb), 0.15);
     margin-bottom: 14px;
+}
+
+.badge::before {
+    content: '//';
+    opacity: 0.6;
 }
 
 .section-header h1,
@@ -199,5 +267,96 @@ p {
     .section-header h1,
     .section-header h2 {
         font-size: 1.6rem;
+    }
+}
+
+/* =========================
+   Shared card hover signature
+   Previously each card type (.stat-card, .project-card,
+   .skill-category, .certificate-card, .contact-card) drew an
+   identical bottom accent bar on hover, defined separately in
+   5 different files. Replaced with one "viewfinder corner"
+   treatment, defined once, that every card type opts into.
+========================= */
+
+.stat-card,
+.project-card,
+.skill-category,
+.certificate-card,
+.contact-card {
+    position: relative;
+}
+
+.stat-card::before,
+.project-card::before,
+.skill-category::before,
+.certificate-card::before,
+.contact-card::before,
+.stat-card::after,
+.project-card::after,
+.skill-category::after,
+.certificate-card::after,
+.contact-card::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+}
+
+.stat-card::before,
+.project-card::before,
+.skill-category::before,
+.certificate-card::before,
+.contact-card::before {
+    top: 10px;
+    left: 10px;
+    border-top: 2px solid var(--accent);
+    border-left: 2px solid var(--accent);
+    border-radius: 4px 0 0 0;
+    transform: translate(6px, 6px);
+}
+
+.stat-card::after,
+.project-card::after,
+.skill-category::after,
+.certificate-card::after,
+.contact-card::after {
+    bottom: 10px;
+    right: 10px;
+    border-bottom: 2px solid var(--accent-2);
+    border-right: 2px solid var(--accent-2);
+    border-radius: 0 0 4px 0;
+    transform: translate(-6px, -6px);
+}
+
+.stat-card:hover::before,
+.project-card:hover::before,
+.skill-category:hover::before,
+.certificate-card:hover::before,
+.contact-card:hover::before,
+.stat-card:hover::after,
+.project-card:hover::after,
+.skill-category:hover::after,
+.certificate-card:hover::after,
+.contact-card:hover::after {
+    opacity: 1;
+    transform: translate(0, 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .stat-card::before,
+    .project-card::before,
+    .skill-category::before,
+    .certificate-card::before,
+    .contact-card::before,
+    .stat-card::after,
+    .project-card::after,
+    .skill-category::after,
+    .certificate-card::after,
+    .contact-card::after {
+        transition: opacity 0.3s ease;
     }
 }

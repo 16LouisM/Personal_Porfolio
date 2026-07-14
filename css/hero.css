@@ -3,8 +3,8 @@
 ========================= */
 
 .hero-section {
-    --ring-size: 385px;
-    --cutout-size: 375px;
+    --ring-size: 440px;
+    --cutout-size: 400px;
     --img-size: 380px;
 
     min-height: 100vh;
@@ -26,10 +26,23 @@
 }
 
 .hero-greeting {
-    display: block;
-    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    font-weight: 500;
     margin-bottom: 1rem;
     color: var(--accent);
+}
+
+.hero-greeting::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-gradient);
 }
 
 .hero-text h1 {
@@ -65,12 +78,12 @@
 }
 
 .primary-btn {
-    background: var(--accent);
+    background: var(--accent-gradient);
 }
 
 .primary-btn:hover,
 .primary-btn:focus-visible {
-    background: var(--accent-light);
+    box-shadow: 0 8px 20px rgba(var(--accent-rgb), 0.3);
     transform: translateY(-3px);
 }
 
@@ -120,9 +133,9 @@
     transform: translate(-50%, -50%);
     background: conic-gradient(
         var(--accent),
+        var(--accent-2),
         var(--accent-light),
-        var(--accent),
-        var(--accent-light),
+        var(--accent-2),
         var(--accent)
     );
     animation:
@@ -214,8 +227,8 @@
 
     50% {
         box-shadow:
-            0 0 30px var(--accent-light),
-            0 0 60px var(--accent-light);
+            0 0 30px var(--accent-2),
+            0 0 60px var(--accent-2);
     }
 
     100% {
@@ -236,11 +249,11 @@
    Tablet
 ========================= */
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
 
     .hero-section {
-        --ring-size: 255px;
-        --cutout-size: 245px;
+        --ring-size: 325px;
+        --cutout-size: 290px;
         --img-size: 250px;
     }
 
@@ -251,11 +264,11 @@
     }
 
     .hero-image {
-        order: -1;
+        order: 1;
     }
 
     .hero-text {
-        order: 1;
+        order: -1;
     }
 
     .hero-buttons {
@@ -272,11 +285,11 @@
    Mobile
 ========================= */
 
-@media (max-width: 425px) {
+@media (max-width: 768px) {
 
     .hero-section {
-        --ring-size: 255px;
-        --cutout-size: 245px;
+        --ring-size: 285px;
+        --cutout-size: 256px;
         --img-size: 250px;
         padding-top: 180px;
     }
@@ -288,12 +301,12 @@
     }
 
     .hero-image {
-        order: -1;
+        order: 1;
         margin-bottom: 2rem;
     }
 
     .hero-text {
-        order: 1;
+        order: -1;
     }
 
     .hero-buttons {
@@ -302,11 +315,11 @@
     }
 }
 
-@media (max-width: 375px) {
+@media (max-width: 425px) {
 
     .hero-section {
-        --ring-size: 175px;
-        --cutout-size: 165px;
+        --ring-size: 205px;
+        --cutout-size: 190px;
         --img-size: 170px;
         padding-top: 180px;
     }

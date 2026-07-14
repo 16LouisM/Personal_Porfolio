@@ -64,31 +64,11 @@
     cursor: pointer;
 }
 
-/* Bottom accent bar */
-.contact-card::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 30%;
-    right: 30%;
-    height: 2px;
-    background: var(--accent);
-    border-radius: 4px;
-    opacity: 0;
-    transition: opacity 0.4s ease, left 0.4s ease, right 0.4s ease;
-}
-
 .contact-card:hover {
     transform: translateY(-4px) scale(1.02);
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
     border-color: var(--glass-card-hover-border);
     background: var(--glass-card-hover-bg);
-}
-
-.contact-card:hover::after {
-    opacity: 1;
-    left: 10%;
-    right: 10%;
 }
 
 /* Icon container */
@@ -221,14 +201,13 @@
     padding: 14px 24px;
     border: none;
     border-radius: 12px;
-    background: linear-gradient(135deg, var(--accent-light), var(--accent));
+    background: var(--accent-gradient);
     color: #fff;
     font-weight: 600;
     font-size: 1rem;
     cursor: pointer;
     transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
-                box-shadow 0.3s ease,
-                background 0.3s ease;
+                box-shadow 0.3s ease;
     box-shadow: 0 4px 15px rgba(var(--accent-rgb), 0.15);
 }
 
