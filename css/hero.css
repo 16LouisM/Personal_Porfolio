@@ -3,8 +3,8 @@
 ========================= */
 
 .hero-section {
-    --ring-size: 440px;
-    --cutout-size: 400px;
+    --ring-size: 385px;
+    --cutout-size: 375px;
     --img-size: 380px;
 
     min-height: 100vh;
@@ -249,11 +249,11 @@
    Tablet
 ========================= */
 
-@media (max-width: 1024px) {
+@media (max-width: 769px) {
 
     .hero-section {
-        --ring-size: 325px;
-        --cutout-size: 290px;
+        --ring-size: 250px;
+        --cutout-size: 245px;
         --img-size: 250px;
     }
 
@@ -264,11 +264,11 @@
     }
 
     .hero-image {
-        order: 1;
+        order: -1;
     }
 
     .hero-text {
-        order: -1;
+        order: 1;
     }
 
     .hero-buttons {
@@ -285,11 +285,11 @@
    Mobile
 ========================= */
 
-@media (max-width: 768px) {
+@media (max-width: 425px) {
 
     .hero-section {
-        --ring-size: 285px;
-        --cutout-size: 256px;
+        --ring-size: 255px;
+        --cutout-size: 245px;
         --img-size: 250px;
         padding-top: 180px;
     }
@@ -315,11 +315,11 @@
     }
 }
 
-@media (max-width: 425px) {
+@media (max-width: 375px) {
 
     .hero-section {
-        --ring-size: 205px;
-        --cutout-size: 190px;
+        --ring-size: 175px;
+        --cutout-size: 165px;
         --img-size: 170px;
         padding-top: 180px;
     }
