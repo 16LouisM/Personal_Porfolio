@@ -275,8 +275,8 @@
 @media (max-width: 425px) {
 
     .hero-section {
-        --ring-size: 285px;
-        --cutout-size: 256px;
+        --ring-size: 255px;
+        --cutout-size: 245px;
         --img-size: 250px;
         padding-top: 180px;
     }
