@@ -22,7 +22,7 @@
 ========================= */
 .certificates-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 20px;
     margin-bottom: 0;
 }
@@ -140,7 +140,7 @@
         padding: 100px 20px 60px;
     }
     .certificates-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 16px;
     }
 }

@@ -22,7 +22,7 @@
 ========================= */
 .skills-wrapper {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 20px;
     margin-bottom: 0;
 }
@@ -103,6 +103,8 @@
 }
 
 .skill-name {
+    flex: 1;
+    min-width: 0;
     font-weight: 500;
     font-size: 0.8rem;
     color: var(--text-color);
@@ -150,7 +152,7 @@
 ========================= */
 @media (max-width: 900px) {
     .skills-wrapper {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 16px;
     }
     .skills-section {
@@ -164,7 +166,7 @@
 
 @media (max-width: 600px) {
     .skills-wrapper {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
         gap: 12px;
     }
     .skills-section {
