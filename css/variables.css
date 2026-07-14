@@ -27,6 +27,16 @@
     --accent-light: #00e5ff;
     --accent-dark: #0099b5;
 
+    /* ---- Second hue for the duotone signature gradient ---- */
+    --accent-2: #7c5cff;
+    --accent-2-rgb: 124, 92, 255;
+    --accent-gradient: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+
+    /* ---- Type system ---- */
+    --font-display: 'Sora', Arial, sans-serif;
+    --font-body: 'Inter', Arial, Helvetica, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+
     /* ---- Base surfaces & text ---- */
     --background-color: #ffffff;
     --surface-color: #f8fafc;
