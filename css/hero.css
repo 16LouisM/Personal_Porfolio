@@ -264,11 +264,11 @@
     }
 
     .hero-image {
-        order: 1;
+        order: -1;
     }
 
     .hero-text {
-        order: -1;
+        order: 1;
     }
 
     .hero-buttons {
@@ -301,12 +301,12 @@
     }
 
     .hero-image {
-        order: 1;
+        order: -1;
         margin-bottom: 2rem;
     }
 
     .hero-text {
-        order: -1;
+        order: 1;
     }
 
     .hero-buttons {
@@ -331,12 +331,12 @@
     }
 
     .hero-image {
-        order: 1;
+        order: -1;
         margin-bottom: 2rem;
     }
 
     .hero-text {
-        order: -1;
+        order: 1;
     }
 
     .hero-buttons {
