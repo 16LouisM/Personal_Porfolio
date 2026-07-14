@@ -239,8 +239,8 @@
 @media (max-width: 768px) {
 
     .hero-section {
-        --ring-size: 325px;
-        --cutout-size: 290px;
+        --ring-size: 255px;
+        --cutout-size: 245px;
         --img-size: 250px;
     }
 
@@ -251,11 +251,11 @@
     }
 
     .hero-image {
-        order: 1;
+        order: -1;
     }
 
     .hero-text {
-        order: -1;
+        order: 1;
     }
 
     .hero-buttons {
