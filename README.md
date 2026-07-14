@@ -1,154 +1,140 @@
-# 🚀 Personal Portfolio Website (Firebase Powered)
+# Louis Mashele — Personal Portfolio
 
-A modern personal portfolio website designed as a dynamic **data-driven shell**, where all content (projects, skills, certificates, images, resume, and contact details) is fetched directly from Firebase Firestore and Firebase Storage.
+A responsive personal portfolio site with a vanilla HTML/CSS/JS frontend and a Firebase backend. Profile info, skills, projects, and certificates are stored in Firestore and Storage rather than hardcoded, so the site content can be updated without touching the markup.
 
----
-
-## 📌 Project Overview
-
-This project is a fully responsive personal portfolio that dynamically loads all content from Firebase. Instead of hardcoding data, the website acts as a frontend shell that displays real-time content managed in the cloud.
-
-It is built to showcase:
-
-- Academic projects
-- Personal projects
-- Technical skills
-- Certificates
-- Profile information
-- Contact and social links
+**Live features:** dark/light theme toggle, animated typing hero, scroll-reveal animations, a mobile slide-in nav, and glass-style cards throughout.
 
 ---
 
-## ⚙️ Tech Stack
+## Tech stack
 
-- **Frontend:** HTML5, CSS3, JavaScript (Vanilla JS)
-- **Backend (BaaS):** Firebase (Google Firebase platform)
-  - Firestore Database (data storage)
-  - Firebase Storage (images, resume, certificates)
-- **Hosting:** Firebase Hosting (optional)
-- **Version Control:** Git & GitHub
-
----
-
-## 📂 Features
-
-- 🔥 Dynamic content loading from Firebase
-- 📁 Projects section (name, image, description, live link)
-- 🧠 Skills section (fetched from database)
-- 🏆 Certificates gallery (stored in Firebase Storage)
-- 👤 About section (editable via Firestore)
-- 📞 Contact details + social media links
-- 📱 Fully responsive design (mobile + desktop)
-- ⚡ Fast loading with minimal frontend logic
+- **Frontend:** HTML5, CSS3 (custom properties, no framework), vanilla JavaScript (ES modules)
+- **Backend:** Firebase
+  - Firestore — profile, skills, projects, certificates, contact info
+  - Firebase Storage — images, certificate scans, CV/résumé
+- **Fonts:** Sora (headings), Inter (body), JetBrains Mono (nav/kickers) via Google Fonts
+- **Icons:** Font Awesome, Devicon
 
 ---
 
-## 🗂️ Project Structure
+## Project structure
 
-/portfolio-project
+```
+.
+├── index.html                 # Single-page shell — sections mount here
+├── components/
+│   └── navbar.html            # Injected into #navbar-container at runtime
 │
-├── index.html
-├── about.html
-├── projects.html
-├── skills.html
-├── contact.html
+├── css/
+│   ├── variables.css          # Design tokens — colors, fonts, glass surfaces (single source of truth)
+│   ├── main.css                # Reset, base type, buttons, shared section-header/card components
+│   ├── navbar.css
+│   ├── hero.css
+│   ├── about.css
+│   ├── skills.css
+│   ├── projects.css
+│   ├── certificates.css
+│   ├── contact.css
+│   ├── footer.css
+│   ├── animations.css
+│   └── responsive.css          # Container/section fluid scaling only
 │
-├── /assets
-│   ├── css/
-│   │   └── style.css
-│   ├── js/
-│   │   ├── firebase-config.js
-│   │   ├── app.js
-│   │   └── data-loader.js
-│   └── images/
+├── js/
+│   ├── main.js                 # Boot sequence — runs on DOMContentLoaded
+│   ├── firebase-config.js      # Firebase app/Firestore init
+│   ├── modules/                # navbar, theme toggle, typing effect, scroll animations, counters
+│   ├── pages/                  # per-section init (about, skills, projects, certificates, contact)
+│   ├── services/               # Firestore reads per collection
+│   └── ui/                     # DOM rendering for each section
 │
-├── /components
-│   ├── navbar.html
-│   ├── footer.html
-│
-├── /firebase
-│   └── config.js
-│
+├── firebase/                    # firebase.json, Firestore rules/indexes (for `firebase deploy`)
+├── data/
+│   └── firebase-schema.json     # Reference schema for seeding Firestore
+├── assets/
+│   ├── images/                  # profile, about, project screenshots, certificates
+│   └── folders/                 # CV/résumé PDF
 └── README.md
+```
 
 ---
 
-## 🔥 Firebase Setup
-
-### 1. Create Firebase Project
-Go to the Firebase Console and create a new project.
-
-### 2. Enable Services
-- Firestore Database (start in test mode)
-- Firebase Storage
-- Firebase Hosting (optional)
-
-### 3. Firestore Collections Structure
-
-#### 📁 projects
-{
-  "title": "Project Name",
-  "description": "Project description",
-  "imageUrl": "https://...",
-  "liveLink": "https://..."
-}
-
-#### 📁 skills
-{
-  "name": "JavaScript",
-  "level": "Advanced"
-}
-
-#### 📁 profile
-{
-  "name": "Your Name",
-  "bio": "Short bio",
-  "email": "you@email.com",
-  "location": "Pretoria, South Africa"
-}
-
-#### 📁 certificates
-{
-  "title": "Certificate Name",
-  "imageUrl": "https://..."
-}
-
----
-
-## 🚀 Getting Started
+## Getting started
 
 ### 1. Clone the repository
-git clone https://github.com/your-username/portfolio.git
 
-### 2. Navigate into the project
-cd portfolio
+```bash
+git clone https://github.com/16LouisM/Personal_Porfolio.git
+cd Personal_Porfolio
+```
 
-### 3. Add Firebase config
-/assets/js/firebase-config.js
+### 2. Set up Firebase
 
-### 4. Run the project
-Open index.html in browser or use Live Server in VS Code
+1. Create a project at the [Firebase console](https://console.firebase.google.com/).
+2. Enable **Firestore Database** and **Storage**.
+3. Copy your web app config into `js/firebase-config.js`:
+
+   ```js
+   const firebaseConfig = {
+     apiKey: "...",
+     authDomain: "...",
+     projectId: "...",
+     storageBucket: "...",
+     messagingSenderId: "...",
+     appId: "..."
+   };
+   ```
+
+4. Seed Firestore with the collections below (see `data/firebase-schema.json` for the reference shape).
+
+### 3. Serve it locally
+
+This is a static site with ES modules, so it needs to be served over HTTP (not opened via `file://`) for imports and Firestore to work.
+
+```bash
+npx serve .
+# or, in VS Code, use the Live Server extension
+```
+
+Then open the printed local URL in your browser.
+
+### 4. Deploy (optional)
+
+```bash
+npm install -g firebase-tools
+firebase login
+firebase deploy
+```
 
 ---
 
-## 📸 Future Improvements
+## Firestore collections
 
-- Admin dashboard (optional)
-- Blog section
-- Dark / Light mode toggle
-- Scroll animations
-- Analytics integration
+| Collection          | Shape (example)                                                            |
+| -------------------- | --------------------------------------------------------------------------- |
+| `profile`             | `{ name, role, bio, description, email, location, cvUrl, imageUrl }`        |
+| `skills`               | `{ category, items: [{ name, icon, level }] }`                              |
+| `projects`             | `{ title, description, imageUrl, gallery, techStack, githubUrl, liveUrl }`  |
+| `certificates`         | `{ title, issuer, date, imageUrl, description }`                            |
+| `contact` / `socials` | `{ email, phone, location, socials: [{ platform, url }] }`                  |
 
----
-
-## 👨‍💻 Author
-
-Your Name  
-IT Student | Developer | Tech Enthusiast  
-📍 Pretoria, South Africa  
+Exact field names are read in `js/services/*.js` and rendered in `js/ui/*.js` — check those if you're adapting the schema.
 
 ---
 
-## 📄 License
+## Customizing the design
 
-This project is licensed under the MIT License.
+All colors, fonts, and "glass card" surface tokens live in `css/variables.css` — change a value there and it propagates everywhere (light and dark themes are both defined in that one file). Section-level layout and animations live in each section's own CSS file.
+
+---
+
+## License
+
+See the [LICENSE](./LICENSE) file.
+
+---
+
+## Author
+
+**Louis Mashele**
+IT Graduate · Developer
+Pretoria, South Africa
