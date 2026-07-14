@@ -168,7 +168,7 @@
 /* =========================
    RESPONSIVE – matches stats
 ========================= */
-@media (max-width: 900px) {
+@media (max-width: 768px) {
     .skills-wrapper {
         grid-template-columns: repeat(2, 1fr);
         gap: 16px;
@@ -182,7 +182,7 @@
     }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 425px) {
     .skills-wrapper {
         grid-template-columns: 1fr 1fr;
         gap: 12px;
@@ -211,7 +211,7 @@
     }
 }
 
-@media (max-width: 452px) {
+@media (max-width: 375px) {
     .skills-wrapper {
         grid-template-columns: 1fr;
         gap: 10px;
