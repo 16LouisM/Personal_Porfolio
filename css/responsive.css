@@ -1,138 +1,55 @@
-/* =========================
-   MOBILE FIRST (DEFAULT)
-   ========================= */
+/* =========================================================
+   NOTE ON WHAT WAS REMOVED FROM THIS FILE
 
-/* Container */
+   This stylesheet is loaded LAST (see index.html), after every
+   component file. It used to also redefine breakpoints for
+   .navbar / .nav-links, .hero-content / .hero-image img, and
+   the .skills-grid / .projects-grid / .certificates-grid — all
+   using a different breakpoint scheme (min-width, e.g. 768px/
+   1024px/1400px) than the equivalent, more specific rules
+   already living in navbar.css, hero.css, skills.css,
+   projects.css and certificates.css (max-width, e.g. 1024px/
+   768px/425px or 900px/600px/400px).
+
+   Because this file loads last and specificity was equal, its
+   rules silently won at overlapping widths — e.g. it was
+   forcing `.navbar { flex-direction: column }` unconditionally
+   (outside any media query) which fought with navbar.css's
+   fixed-position slide-in mobile menu, and it was overriding
+   hero.css's carefully-sized profile photo at several
+   breakpoints. Net effect: two competing responsive systems for
+   the same elements, with results depending on exact viewport
+   width and load order rather than design intent.
+
+   Those component files already own their own responsive
+   behavior (and now do it more correctly — see hero.css and
+   navbar.css). The only genuinely unique behavior this file
+   contributed — fluid .container width and section padding as
+   the viewport grows — is kept below.
+========================================================= */
+
 .container {
     width: 95%;
     margin: 0 auto;
 }
 
-/* Navbar (mobile stacking) */
-.navbar {
-    flex-direction: column;
-    gap: 10px;
-}
-
-.nav-links {
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-}
-
-/* Hero section */
-.hero-content {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    gap: 30px;
-}
-
-.hero-image img {
-    width: 200px;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 50%;
-}
-
-/* Grid layouts default (mobile) */
-.skills-grid,
-.projects-grid,
-.certificates-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 20px;
-}
-
-/* Section spacing */
 section {
     padding: 70px 0;
 }
 
-/* Buttons */
-.hero-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-
-/* =========================
-   TABLETS (768px+)
-   ========================= */
 @media (min-width: 768px) {
-
     .container {
         width: 90%;
     }
-
-    /* Navbar horizontal */
-    .navbar {
-        flex-direction: row;
-        justify-content: space-between;
-    }
-
-    .nav-links {
-        flex-direction: row;
-        gap: 20px;
-    }
-
-    /* Hero layout */
-    .hero-content {
-        flex-direction: row;
-        text-align: left;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .hero-image img {
-        width: 280px;
-        height: 280px;
-    }
-
-    /* Buttons row */
-    .hero-buttons {
-        flex-direction: row;
-    }
-
-    /* Grid layouts */
-    .skills-grid,
-    .projects-grid,
-    .certificates-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
 }
 
-
-/* =========================
-   LAPTOPS (1024px+)
-   ========================= */
 @media (min-width: 1024px) {
-
     .container {
         width: 85%;
     }
-
-    /* Hero image bigger */
-    .hero-image img {
-        width: 320px;
-        height: 320px;
-    }
-
-    /* Grid layouts */
-    .skills-grid,
-    .projects-grid,
-    .certificates-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
 }
 
-
-/* =========================
-   DESKTOP (1200px+)
-   ========================= */
 @media (min-width: 1200px) {
-
     .container {
         max-width: 1200px;
     }
@@ -140,26 +57,10 @@ section {
     section {
         padding: 100px 0;
     }
-
-    .hero-image img {
-        width: 350px;
-        height: 350px;
-    }
 }
 
-
-/* =========================
-   LARGE SCREENS (1400px+)
-   ========================= */
 @media (min-width: 1400px) {
-
     .container {
         max-width: 1400px;
-    }
-
-    .skills-grid,
-    .projects-grid,
-    .certificates-grid {
-        grid-template-columns: repeat(4, 1fr);
     }
 }

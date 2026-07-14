@@ -1,17 +1,77 @@
+/* =========================================================
+   DESIGN TOKENS — single source of truth
+   Every other stylesheet should read from these variables
+   instead of re-declaring its own :root / [data-theme="dark"]
+   blocks. Previously about.css, skills.css, projects.css,
+   certificates.css, contact.css, footer.css and navbar.css
+   each defined their own copies of the same concepts
+   (glass backgrounds, accent colors, hover borders) with
+   slightly different values under the same variable names.
+   Because custom properties are global, whichever stylesheet
+   loaded last silently won for everyone — e.g. the accent
+   hover-border on About's stat cards was actually being set
+   by projects.css. Centralizing here removes that class of bug.
+========================================================= */
+
 :root {
+    /* ---- Brand (reserved for future use — not yet consumed
+       by any component, kept for continuity with existing
+       markup/JS that may reference them) ---- */
     --primary-color: #3b82f6;
     --secondary-color: #1e293b;
 
+    /* ---- Accent (unifies the two near-identical cyans that
+       had drifted apart across files: #00bcd4 and #00d4ff) ---- */
+    --accent: #00bcd4;
+    --accent-rgb: 0, 188, 212;
+    --accent-light: #00e5ff;
+    --accent-dark: #0099b5;
+
+    /* ---- Base surfaces & text ---- */
     --background-color: #ffffff;
     --surface-color: #f8fafc;
-
     --text-color: #000000;
     --text-secondary: #64748b;
-
     --border-color: #e2e8f0;
+    --border-color-hover: rgba(0, 0, 0, 0.15);
 
-    --navbar-bg: rgba(255, 255, 255, 0.6);
+    /* ---- Navbar ---- */
+    --navbar-bg: rgba(255, 255, 255, 0.85);
     --navbar-border: rgba(0, 0, 0, 0.08);
+    --overlay-bg: rgba(0, 0, 0, 0.35);
+
+    /* ---- Shared "frosted card" look — used by stat cards,
+       project cards, skill categories, certificate cards ---- */
+    --glass-card-bg: rgba(255, 255, 255, 0.50);
+    --glass-card-border: rgba(0, 0, 0, 0.04);
+    --glass-card-hover-bg: rgba(255, 255, 255, 0.75);
+    --glass-card-hover-border: rgba(var(--accent-rgb), 0.20);
+
+    /* ---- Larger glass panel — About intro card, Contact info card ---- */
+    --glass-panel-bg: rgba(255, 255, 255, 0.70);
+    --glass-panel-border: rgba(0, 0, 0, 0.06);
+    --glass-panel-hover-border: rgba(var(--accent-rgb), 0.20);
+
+    /* ---- Glass modal — project / certificate lightboxes ---- */
+    --glass-modal-bg: rgba(255, 255, 255, 0.80);
+    --glass-modal-border: rgba(0, 0, 0, 0.06);
+
+    /* ---- Form inputs ---- */
+    --input-bg: rgba(255, 255, 255, 0.60);
+    --input-focus-bg: rgba(255, 255, 255, 0.80);
+
+    /* ---- Footer & social icons ---- */
+    --footer-bg: rgba(255, 255, 255, 0.50);
+    --footer-border: rgba(0, 0, 0, 0.08);
+    --social-bg: rgba(255, 255, 255, 0.30);
+    --social-border: rgba(0, 0, 0, 0.04);
+    --social-hover-bg: rgba(var(--accent-rgb), 0.08);
+    --social-hover-border: rgba(var(--accent-rgb), 0.20);
+    --social-hover-color: var(--accent-dark);
+
+    /* ---- Skill bars ---- */
+    --skill-bar-bg: rgba(0, 0, 0, 0.06);
+    --skill-level-color: var(--accent-dark);
 
     --transition: 0.3s ease;
 }
@@ -25,14 +85,48 @@
     --text-secondary: #a1a1aa;
 
     --border-color: #2a2a2a;
+    --border-color-hover: rgba(255, 255, 255, 0.25);
 
-    --navbar-bg: rgba(18, 18, 18, 0.6);
-    --navbar-border: rgba(255, 255, 255, 0.08);
+    --navbar-bg: rgba(18, 18, 18, 0.88);
+    --navbar-border: rgba(255, 255, 255, 0.06);
+    --overlay-bg: rgba(0, 0, 0, 0.55);
+
+    --glass-card-bg: rgba(255, 255, 255, 0.03);
+    --glass-card-border: rgba(255, 255, 255, 0.06);
+    --glass-card-hover-bg: rgba(255, 255, 255, 0.06);
+    --glass-card-hover-border: rgba(var(--accent-rgb), 0.15);
+
+    --glass-panel-bg: rgba(255, 255, 255, 0.05);
+    --glass-panel-border: rgba(255, 255, 255, 0.08);
+    --glass-panel-hover-border: rgba(var(--accent-rgb), 0.15);
+
+    --glass-modal-bg: rgba(20, 20, 20, 0.65);
+    --glass-modal-border: rgba(255, 255, 255, 0.08);
+
+    --input-bg: rgba(255, 255, 255, 0.04);
+    --input-focus-bg: rgba(255, 255, 255, 0.06);
+
+    --footer-bg: rgba(255, 255, 255, 0.03);
+    --footer-border: rgba(255, 255, 255, 0.06);
+    --social-bg: rgba(255, 255, 255, 0.03);
+    --social-border: rgba(255, 255, 255, 0.06);
+    --social-hover-bg: rgba(var(--accent-rgb), 0.08);
+    --social-hover-border: rgba(var(--accent-rgb), 0.15);
+    --social-hover-color: var(--accent-light);
+
+    --skill-bar-bg: rgba(255, 255, 255, 0.08);
+    --skill-level-color: var(--accent-light);
 }
 
-/* smooth transitions */
+/* smooth theme-switch transition */
 body.theme-transition * {
     transition: background 0.3s ease,
                 color 0.3s ease,
                 border-color 0.3s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.theme-transition * {
+        transition: none;
+    }
 }

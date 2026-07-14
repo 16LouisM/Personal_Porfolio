@@ -18,45 +18,6 @@
 }
 
 /* =========================
-   SECTION HEADER (matches about/skills/projects)
-========================= */
-.certificates-section .section-header {
-    text-align: center;
-    margin-bottom: 50px;
-}
-
-.certificates-section .section-header .badge {
-    display: inline-block;
-    padding: 6px 18px;
-    border-radius: 50px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    background: rgba(0, 212, 255, 0.12);
-    color: #00d4ff;
-    border: 1px solid rgba(0, 212, 255, 0.15);
-    margin-bottom: 14px;
-}
-
-.certificates-section .section-header h2 {
-    font-size: clamp(2rem, 5vw, 3.2rem);
-    font-weight: 800;
-    line-height: 1.15;
-    margin-bottom: 12px;
-    color: var(--text-color);
-}
-
-.certificates-section .section-header p {
-    font-size: 1.1rem;
-    opacity: 0.7;
-    max-width: 700px;
-    margin: 0 auto;
-    line-height: 1.7;
-    color: var(--text-secondary);
-}
-
-/* =========================
    CERTIFICATES GRID – matches stats/skills (4 cols → 2 → 1)
 ========================= */
 .certificates-grid {
@@ -71,8 +32,8 @@
 ========================= */
 .certificate-card {
     position: relative;
-    background: var(--cert-card-bg);
-    border: 1px solid var(--cert-card-border);
+    background: var(--glass-card-bg);
+    border: 1px solid var(--glass-card-border);
     border-radius: 16px;
     overflow: hidden;
     -webkit-backdrop-filter: blur(4px);
@@ -95,7 +56,7 @@
     left: 30%;
     right: 30%;
     height: 2px;
-    background: #00d4ff;
+    background: var(--accent);
     border-radius: 4px;
     opacity: 0;
     transition: opacity 0.4s ease, left 0.4s ease, right 0.4s ease;
@@ -104,8 +65,8 @@
 .certificate-card:hover {
     transform: translateY(-8px) scale(1.02);
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.10);
-    border-color: var(--cert-card-hover-border);
-    background: var(--cert-card-hover-bg);
+    border-color: var(--glass-card-hover-border);
+    background: var(--glass-card-hover-bg);
 }
 
 .certificate-card:hover::after {
@@ -180,7 +141,7 @@
     margin-top: 12px;
     font-size: 0.85rem;
     font-weight: 600;
-    color: #00d4ff;
+    color: var(--accent);
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -257,8 +218,8 @@
 
 /* Modal content (glass box) */
 .certificate-modal .modal-content {
-    background: var(--modal-bg);
-    border: 1px solid var(--modal-border);
+    background: var(--glass-modal-bg);
+    border: 1px solid var(--glass-modal-border);
     color: var(--text-color);
     width: 90%;
     max-width: 800px;
@@ -271,7 +232,7 @@
     backdrop-filter: blur(18px);
     transform: scale(0.95);
     opacity: 0;
-    transition: all 0.3s ease;
+    transition: transform 0.3s ease, opacity 0.3s ease;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -307,7 +268,7 @@
     border-radius: 12px;
     object-fit: contain;
     margin-bottom: 20px;
-    border: 1px solid var(--modal-border);
+    border: 1px solid var(--glass-modal-border);
 }
 
 /* Modal info text */
@@ -337,29 +298,4 @@
     opacity: 0.6;
     margin-bottom: 10px;
     color: var(--text-secondary);
-}
-
-/* =========================
-   THEME CUSTOM PROPERTIES (Light & Dark)
-========================= */
-/* Default (light) variables */
-:root {
-    --cert-card-bg: rgba(255, 255, 255, 0.50);
-    --cert-card-border: rgba(0, 0, 0, 0.04);
-    --cert-card-hover-bg: rgba(255, 255, 255, 0.75);
-    --cert-card-hover-border: rgba(0, 212, 255, 0.20);
-
-    --modal-bg: rgba(255, 255, 255, 0.80);
-    --modal-border: rgba(0, 0, 0, 0.06);
-}
-
-/* Dark theme overrides */
-[data-theme="dark"] {
-    --cert-card-bg: rgba(255, 255, 255, 0.03);
-    --cert-card-border: rgba(255, 255, 255, 0.06);
-    --cert-card-hover-bg: rgba(255, 255, 255, 0.06);
-    --cert-card-hover-border: rgba(0, 212, 255, 0.15);
-
-    --modal-bg: rgba(20, 20, 20, 0.65);
-    --modal-border: rgba(255, 255, 255, 0.08);
 }

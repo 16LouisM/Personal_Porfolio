@@ -3,6 +3,10 @@
 ========================= */
 
 .hero-section {
+    --ring-size: 385px;
+    --cutout-size: 375px;
+    --img-size: 380px;
+
     min-height: 100vh;
     display: flex;
     align-items: flex-start;
@@ -18,23 +22,24 @@
 
 .hero-text {
     flex: 1;
+    min-width: 0;
 }
 
 .hero-greeting {
     display: block;
     font-size: 1.2rem;
     margin-bottom: 1rem;
-    color: #00bcd4;
+    color: var(--accent);
 }
 
 .hero-text h1 {
-    font-size: 4.5rem;
+    font-size: clamp(2.5rem, 5vw + 1rem, 4.5rem);
     font-weight: 700;
     margin-bottom: 1rem;
 }
 
 .hero-text h2 {
-    font-size: 2rem;
+    font-size: clamp(1.4rem, 2vw + 0.8rem, 2rem);
     margin-bottom: 1.5rem;
     color: #d1d5db;
 }
@@ -56,107 +61,102 @@
     padding: 14px 28px;
     border-radius: 8px;
     font-weight: 600;
-    transition: all 0.3s ease;
+    transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
 }
 
 .primary-btn {
-    background: #00bcd4;
+    background: var(--accent);
 }
 
-.primary-btn:hover {
+.primary-btn:hover,
+.primary-btn:focus-visible {
+    background: var(--accent-light);
     transform: translateY(-3px);
 }
 
-.secondary-btn {
-    border: 2px solid #00bcd4;
-    color: #00bcd4;
-}
-
-.secondary-btn:hover {
-    background: #00bcd4;
-    color: white;
-    transform: translateY(-3px);
-}
-
+.secondary-btn,
 .cv-btn {
-    border: 2px solid #00bcd4;
-    color: #00bcd4;
+    border: 2px solid var(--accent);
+    color: var(--accent);
 }
 
-.cv-btn:hover {
-    background: #00bcd4;
+.secondary-btn:hover,
+.secondary-btn:focus-visible,
+.cv-btn:hover,
+.cv-btn:focus-visible {
+    background: var(--accent);
     color: white;
     transform: translateY(-3px);
 }
 
 /* =========================
    Hero Image
+   Ring, cutout and photo share one centered stacking context
+   (top/left 50% + translate) instead of relying on flex's
+   default static-position guesswork, so sizes never drift.
 ========================= */
 
 .hero-image {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-shrink: 0;
+    flex-basis: var(--ring-size);
     position: relative;
+    width: var(--ring-size);
+    height: var(--ring-size);
+    margin: 0 auto;
 }
 
-/* Rotating Ring */
-
+/* Rotating Ring — previously sized *smaller* than the cutout
+   and photo on top of it, so it was completely hidden and the
+   rotate animation had nothing visible to animate. Now the
+   largest layer, so a visible spinning band shows around the photo. */
 .hero-image::before {
     content: "";
-
     position: absolute;
-
-    width: 355px;
-    height: 355px;
-
+    top: 50%;
+    left: 50%;
+    width: var(--ring-size);
+    height: var(--ring-size);
     border-radius: 50%;
-
+    transform: translate(-50%, -50%);
     background: conic-gradient(
-        #00bcd4,
-        #00e5ff,
-        #00bcd4,
-        #00e5ff,
-        #00bcd4
+        var(--accent),
+        var(--accent-light),
+        var(--accent),
+        var(--accent-light),
+        var(--accent)
     );
-
     animation:
         rotateRing 6s linear infinite,
         pulseGlow 3s ease-in-out infinite;
-
+    will-change: transform;
     z-index: 1;
 }
 
 /* Inner Cutout */
-
 .hero-image::after {
     content: "";
-
     position: absolute;
-
-    width: 418px;
-    height: 418px;
-
-    border-radius: 100%;
-
-    background: var(--bg-color);
-
-    z-index: 1;
+    top: 50%;
+    left: 50%;
+    width: var(--cutout-size);
+    height: var(--cutout-size);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--background-color);
+    z-index: 2;
 }
 
 /* Profile Image */
-
 .hero-image img {
-    width: 418px;
-    height: 418px;
-
+    position: relative;
+    width: var(--img-size);
+    height: var(--img-size);
     border-radius: 50%;
     object-fit: cover;
-
-    position: relative;
-    z-index: 2;
-
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 3;
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -171,11 +171,11 @@
 }
 
 #typing-text {
-    color: #00bcd4;
+    color: var(--accent);
 }
 
 .cursor {
-    color: #00bcd4;
+    color: var(--accent);
     animation: blink 0.8s infinite;
 }
 
@@ -197,31 +197,38 @@
 
 @keyframes rotateRing {
     from {
-        transform: rotate(0deg);
+        transform: translate(-50%, -50%) rotate(0deg);
     }
 
     to {
-        transform: rotate(360deg);
+        transform: translate(-50%, -50%) rotate(360deg);
     }
 }
 
 @keyframes pulseGlow {
     0% {
         box-shadow:
-            0 0 15px #00bcd4,
-            0 0 30px #00bcd4;
+            0 0 15px var(--accent),
+            0 0 30px var(--accent);
     }
 
     50% {
         box-shadow:
-            0 0 30px #00e5ff,
-            0 0 60px #00e5ff;
+            0 0 30px var(--accent-light),
+            0 0 60px var(--accent-light);
     }
 
     100% {
         box-shadow:
-            0 0 15px #00bcd4,
-            0 0 30px #00bcd4;
+            0 0 15px var(--accent),
+            0 0 30px var(--accent);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-image::before,
+    .cursor {
+        animation: none;
     }
 }
 
@@ -229,7 +236,13 @@
    Tablet
 ========================= */
 
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
+
+    .hero-section {
+        --ring-size: 255px;
+        --cutout-size: 245px;
+        --img-size: 250px;
+    }
 
     .hero-content {
         flex-direction: column;
@@ -238,30 +251,15 @@
     }
 
     .hero-image {
-        order: 1;
+        order: -1;
     }
 
     .hero-text {
-        order: -1;
+        order: 1;
     }
 
     .hero-buttons {
         justify-content: center;
-    }
-
-    .hero-image img {
-        width: 250px;
-        height: 250px;
-    }
-
-    .hero-image::before {
-        width: 325px;
-        height: 325px;
-    }
-
-    .hero-image::after {
-        width: 256px;
-        height: 256px;
     }
 
     .hero-text p {
@@ -274,59 +272,12 @@
    Mobile
 ========================= */
 
-@media (max-width: 768px) {
-
-    .hero-section {
-        padding-top: 180px;
-    }
-
-    .hero-content {
-        flex-direction: column;
-        text-align: center;
-        gap: 2rem;
-    }
-
-    .hero-image {
-        order: 1;
-        margin-bottom: 2rem;
-    }
-
-    .hero-text {
-        order: -1;
-    }
-
-    .hero-text h1 {
-        font-size: 3rem;
-    }
-
-    .hero-text h2 {
-        font-size: 1.5rem;
-    }
-
-    .hero-buttons {
-        justify-content: center;
-        flex-wrap: wrap;
-    }
-
-    .hero-image img {
-        width: 250px;
-        height: 250px;
-    }
-
-    .hero-image::before {
-        width: 285px;
-        height: 285px;
-    }
-
-    .hero-image::after {
-        width: 256px;
-        height: 256px;
-    }
-}
-
 @media (max-width: 425px) {
 
     .hero-section {
+        --ring-size: 255px;
+        --cutout-size: 245px;
+        --img-size: 250px;
         padding-top: 180px;
     }
 
@@ -345,31 +296,38 @@
         order: 1;
     }
 
-    .hero-text h1 {
-        font-size: 3rem;
+    .hero-buttons {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 375px) {
+
+    .hero-section {
+        --ring-size: 175px;
+        --cutout-size: 165px;
+        --img-size: 170px;
+        padding-top: 180px;
     }
 
-    .hero-text h2 {
-        font-size: 1.5rem;
+    .hero-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 2rem;
+    }
+
+    .hero-image {
+        order: -1;
+        margin-bottom: 2rem;
+    }
+
+    .hero-text {
+        order: 1;
     }
 
     .hero-buttons {
         justify-content: center;
         flex-wrap: wrap;
-    }
-
-    .hero-image img {
-        width: 250px;
-        height: 250px;
-    }
-
-    .hero-image::before {
-        width: 205px;
-        height: 205px;
-    }
-
-    .hero-image::after {
-        width: 256px;
-        height: 256px;
     }
 }

@@ -39,7 +39,7 @@
     border-radius: 50%;
     background: var(--social-bg);
     border: 1px solid var(--social-border);
-    color: #00d4ff;
+    color: var(--accent);
     font-size: 1.3rem;
     text-decoration: none;
     transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
@@ -52,11 +52,12 @@
 
 }
 
-.footer-socials a:hover {
+.footer-socials a:hover,
+.footer-socials a:focus-visible {
     transform: translateY(-6px) scale(1.05);
     background: var(--social-hover-bg);
     border-color: var(--social-hover-border);
-    box-shadow: 0 8px 24px rgba(0, 212, 255, 0.10);
+    box-shadow: 0 8px 24px rgba(var(--accent-rgb), 0.10);
     color: var(--social-hover-color);
 }
 
@@ -89,6 +90,12 @@
     }
 }
 
+@media (prefers-reduced-motion: reduce) {
+    .footer-text .heart {
+        animation: none;
+    }
+}
+
 /* =========================
    RESPONSIVE
 ========================= */
@@ -118,28 +125,4 @@
         height: 38px;
         font-size: 1rem;
     }
-}
-
-/* =========================
-   THEME VARIABLES (Light & Dark)
-========================= */
-:root {
-    /* Light theme defaults */
-    --footer-bg: rgba(255, 255, 255, 0.50);
-    --footer-border: rgba(0, 0, 0, 0.08);
-    --social-bg: rgba(255, 255, 255, 0.30);
-    --social-border: rgba(0, 0, 0, 0.04);
-    --social-hover-bg: rgba(0, 212, 255, 0.08);
-    --social-hover-border: rgba(0, 212, 255, 0.20);
-    --social-hover-color: #0099b5;
-}
-
-[data-theme="dark"] {
-    --footer-bg: rgba(255, 255, 255, 0.03);
-    --footer-border: rgba(255, 255, 255, 0.06);
-    --social-bg: rgba(255, 255, 255, 0.03);
-    --social-border: rgba(255, 255, 255, 0.06);
-    --social-hover-bg: rgba(0, 212, 255, 0.08);
-    --social-hover-border: rgba(0, 212, 255, 0.15);
-    --social-hover-color: #00d4ff;
 }
