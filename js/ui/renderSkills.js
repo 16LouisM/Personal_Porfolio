@@ -58,7 +58,7 @@ export function renderSkills(containerId, skills, animationDelay = 200) {
     // Animate bars after a short delay
     setTimeout(() => {
         document.querySelectorAll(".skill-bar-fill").forEach(bar => {
-            const level = parseInt(bar.dataset.level, 10) || 0;
+            const level = Number.parseInt(bar.dataset.level, 10) || 0;
             bar.style.width = level + "%";
         });
     }, animationDelay);
