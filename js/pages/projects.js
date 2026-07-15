@@ -1,54 +1,40 @@
-import { db } from "../firebase-config.js";
-
+import { fetchProjects } from "../services/projectService.js";
 import {
-    collection,
-    getDocs,
-    query,
-    orderBy
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+    initModal,
+    initZoom,
+    showModal,
+    hideModal,
+    openZoom,
+    closeZoom,
+    renderProjectGrid,
+    renderModalContent,
+} from "../ui/renderProjects.js";
 
 /* =========================
-   GLOBAL STATE
+   STATE
 ========================= */
 
-const INITIAL_PROJECT_COUNT = 4;
-let showingAllProjects = false;
-
-let modal;
-let zoomOverlay;
-let zoomImage;
-
-let isScrolling = false;
-let scrollTimeout;
-
 let currentProjects = [];
+let showingAllProjects = false;
 let currentProjectIndex = 0;
 let currentImageIndex = 0;
 
 /* =========================
-   INIT PROJECTS
+   ENTRY POINT
 ========================= */
 
 export async function initProjects() {
-
     const projectsGrid = document.getElementById("projects-grid");
     if (!projectsGrid) return;
 
-    modal = document.getElementById("projectModal");
-
-    initImageZoom();
-    initKeyboardControls();
+    // Initialize UI components
+    initModal();
+    initZoom();
 
     try {
+        currentProjects = await fetchProjects();
 
-        const snapshot = await getDocs(
-            query(collection(db, "projects"), orderBy("order", "asc"))
-        );
-
-        projectsGrid.innerHTML = "";
-        currentProjects = [];
-
-        if (snapshot.empty) {
+        if (currentProjects.length === 0) {
             projectsGrid.innerHTML = `
                 <div class="projects-empty">
                     <h3>No Projects Found</h3>
@@ -57,491 +43,161 @@ export async function initProjects() {
             return;
         }
 
-        snapshot.forEach((doc) => {
-            currentProjects.push(doc.data());
-        });
+        // Initial render (showing limited projects)
+        renderCurrentProjects();
 
-        renderProjects();
-
+        // Toggle button
         const toggleBtn = document.getElementById("toggleProjectsBtn");
-
         toggleBtn.onclick = () => {
-
             showingAllProjects = !showingAllProjects;
-
-            renderProjects();
-
+            renderCurrentProjects();
             if (!showingAllProjects) {
-
-                document
-                    .getElementById("projects")
-                    .scrollIntoView({
-                        behavior: "smooth",
-                        block: "start"
-                    });
-
+                document.getElementById("projects").scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                });
             }
         };
+
+        // Keyboard controls
+        document.addEventListener("keydown", handleKeydown);
 
     } catch (err) {
         console.error("Failed to load projects:", err);
     }
 }
 
-function getInitialProjectCount() {
+/* =========================
+   RENDER LOGIC
+========================= */
 
-    const width = window.innerWidth;
+function renderCurrentProjects() {
+    const initialCount = getInitialProjectCount();
+    const limit = showingAllProjects ? -1 : initialCount;
 
-    if (width >= 1200 && width < 1600) {
-        return 3;
+    renderProjectGrid(
+        currentProjects,
+        "projects-grid",
+        limit,
+        {
+            onDetailsClick: openProjectModal,
+        }
+    );
+
+    // Update toggle button visibility and text
+    const toggleBtn = document.getElementById("toggleProjectsBtn");
+    if (currentProjects.length > getInitialProjectCount()) {
+        toggleBtn.hidden = false;
+        toggleBtn.textContent = showingAllProjects
+            ? "Show Less"
+            : "View All Projects";
+    } else {
+        toggleBtn.hidden = true;
     }
+}
 
+function getInitialProjectCount() {
+    const width = window.innerWidth;
+    if (width >= 1200 && width < 1600) return 3;
     return 4;
 }
 
 /* =========================
-   CREATE PROJECT CARD
-========================= */
-
-function createProjectCard(project, index) {
-
-    const card = document.createElement("article");
-    card.className = "project-card";
-
-    const techBadges = (project.technologies || [])
-        .map(t => `<span class="tech-badge">${t}</span>`)
-        .join("");
-
-    card.innerHTML = `
-        <div class="project-image">
-            <img src="${project.imageUrl}" alt="${project.name}" loading="lazy">
-        </div>
-
-        <div class="project-content">
-
-            <h3 class="project-title">${project.name || "Untitled"}</h3>
-
-            <p class="project-description">
-                ${project.description || ""}
-            </p>
-
-            <div class="project-tech">
-                ${techBadges}
-            </div>
-
-            <div class="project-links">
-
-                <a class="project-btn demo-btn"
-                   href="${project.projectUrl || "#"}"
-                   target="_blank"
-                   rel="noopener noreferrer">
-                   View
-                </a>
-
-                <button class="project-btn details-btn">
-                    Details
-                </button>
-
-            </div>
-
-        </div>
-    `;
-
-    card.querySelector(".details-btn")
-        .addEventListener("click", () => {
-            openProjectModal(index);
-        });
-
-    return card;
-}
-
-function renderProjects() {
-
-    const projectsGrid = document.getElementById("projects-grid");
-    const toggleBtn = document.getElementById("toggleProjectsBtn");
-
-    projectsGrid.innerHTML = "";
-
-    const initialCount = getInitialProjectCount();
-
-    const visibleProjects = showingAllProjects
-        ? currentProjects
-        : currentProjects.slice(0, initialCount);
-
-    visibleProjects.forEach((project, index) => {
-
-        // Find the original index
-        const originalIndex = currentProjects.indexOf(project);
-
-        const card = createProjectCard(project, originalIndex);
-
-        projectsGrid.appendChild(card);
-    });
-
-    // Show button only if more than 4 projects
-    if (currentProjects.length > getInitialProjectCount()) {
-
-        toggleBtn.hidden = false;
-
-        toggleBtn.textContent = showingAllProjects
-            ? "Show Less"
-            : "View All Projects";
-
-    } else {
-
-        toggleBtn.hidden = true;
-
-    }
-}
-
-/* =========================
-   OPEN MODAL (SAFE VERSION)
+   MODAL NAVIGATION
 ========================= */
 
 function openProjectModal(index) {
-
-    const project = currentProjects?.[index];
-
+    const project = currentProjects[index];
     if (!project) {
         console.error("Invalid project index:", index);
         return;
     }
 
     currentProjectIndex = index;
+    currentImageIndex = 0;
 
-    const modalEl = document.getElementById("projectModal");
-    modalEl.classList.add("show");
+    // Populate modal content with callbacks
+    renderModalContent(project, {
+        onImageClick: (imgIndex) => {
+            currentImageIndex = imgIndex;
+            const images = getCurrentProjectImages();
+            openZoom(images[currentImageIndex]);
+        },
+        onSwipeNext: () => {
+            const images = getCurrentProjectImages();
+            currentImageIndex = (currentImageIndex + 1) % images.length;
+            openZoom(images[currentImageIndex]);
+        },
+        onSwipePrev: () => {
+            const images = getCurrentProjectImages();
+            currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+            openZoom(images[currentImageIndex]);
+        },
+    });
 
-    setText("modalTitle", project.name);
-    setText("modalSubtitle", project.subtitle);
-    setText("modalDescription", project.description);
-
-    renderGallery(project);
-    renderTech(project);
-    renderFeatures(project);
+    showModal();
 }
 
-/* =========================
-   NAVIGATION (PROJECTS)
-========================= */
+function getCurrentProjectImages() {
+    const project = currentProjects[currentProjectIndex];
+    return project?.images?.length ? project.images : [project.imageUrl];
+}
 
 function nextProject() {
-
     if (!currentProjects.length) return;
-
-    currentProjectIndex =
-        (currentProjectIndex + 1) % currentProjects.length;
-
+    currentProjectIndex = (currentProjectIndex + 1) % currentProjects.length;
     openProjectModal(currentProjectIndex);
 }
 
 function prevProject() {
-
     if (!currentProjects.length) return;
-
-    currentProjectIndex =
-        (currentProjectIndex - 1 + currentProjects.length) %
-        currentProjects.length;
-
+    currentProjectIndex = (currentProjectIndex - 1 + currentProjects.length) % currentProjects.length;
     openProjectModal(currentProjectIndex);
 }
 
-/* =========================
-   MODAL HELPERS
-========================= */
+function nextImage() {
+    const images = getCurrentProjectImages();
+    currentImageIndex = (currentImageIndex + 1) % images.length;
+    openZoom(images[currentImageIndex]);
+}
 
-function setText(id, value) {
-    const el = document.getElementById(id);
-    if (el) el.textContent = value || "";
+function prevImage() {
+    const images = getCurrentProjectImages();
+    currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+    openZoom(images[currentImageIndex]);
 }
 
 /* =========================
-   GALLERY (SWIPE + ZOOM)
+   KEYBOARD HANDLER
 ========================= */
 
-function renderGallery(project) {
-
-    const gallery = document.getElementById("modalGallery");
-    if (!gallery) return;
-
-    gallery.innerHTML = "";
-
-    const images = project.images?.length
-        ? project.images
-        : [project.imageUrl];
-
-    currentImageIndex = 0;
-
-    let startX = 0;
-    let startY = 0;
-
-    let moved = false;
-
-    let interactionLock = false;
-    let lockTimeout;
-
-    let pointerStartTime = 0;
-
-    // IMPORTANT: reset lock when rendering new gallery
-    interactionLock = false;
-
-    function lockInteraction() {
-        interactionLock = true;
-        clearTimeout(lockTimeout);
-
-        lockTimeout = setTimeout(() => {
-            interactionLock = false;
-        }, 250);
+function handleKeydown(e) {
+    switch (e.key) {
+        case "Escape":
+            hideModal();
+            closeZoom();
+            break;
+        case "ArrowRight":
+            nextProject();
+            break;
+        case "ArrowLeft":
+            prevProject();
+            break;
+        case "ArrowUp":
+            nextImage();
+            break;
+        case "ArrowDown":
+            prevImage();
+            break;
     }
-
-    images.forEach(img => {
-
-        const image = document.createElement("img");
-        image.src = img;
-        image.alt = project.name || "project image";
-        image.loading = "lazy";
-        image.style.cursor = "zoom-in";
-
-        /* =========================
-           POINTER DOWN
-        ========================= */
-        image.addEventListener("pointerdown", (e) => {
-            moved = false;
-
-            pointerStartTime = Date.now();
-
-            startX = e.clientX;
-            startY = e.clientY;
-        });
-
-        /* =========================
-           POINTER MOVE
-        ========================= */
-        image.addEventListener("pointermove", (e) => {
-
-            const dx = Math.abs(e.clientX - startX);
-            const dy = Math.abs(e.clientY - startY);
-
-            if (dx > 8 || dy > 8) {
-                moved = true;
-            }
-        });
-
-        /* =========================
-           CLICK (SAFE ZOOM)
-        ========================= */
-        image.addEventListener("click", (e) => {
-
-            const clickDuration = Date.now() - pointerStartTime;
-
-            // 🚫 HARD BLOCK ALL ACCIDENTAL TRIGGERS
-            if (moved || interactionLock || clickDuration > 250) {
-                e.preventDefault();
-                e.stopPropagation();
-                return;
-            }
-
-            openImageZoom(img);
-        });
-
-        gallery.appendChild(image);
-    });
-
-    /* =========================
-       SCROLL DETECTION (CRITICAL FIX)
-    ========================= */
-    gallery.addEventListener("scroll", lockInteraction, { passive: true });
-
-    /* =========================
-       WHEEL DETECTION (DESKTOP FIX)
-    ========================= */
-    gallery.addEventListener("wheel", lockInteraction, { passive: true });
-
-    /* =========================
-       POINTER DOWN ON GALLERY (SWIPE)
-    ========================= */
-    gallery.addEventListener("pointerdown", (e) => {
-        startX = e.clientX;
-    });
-
-    gallery.addEventListener("pointerup", (e) => {
-
-        if (interactionLock) return;
-
-        const endX = e.clientX;
-        const diff = startX - endX;
-
-        if (Math.abs(diff) > 50) {
-            if (diff > 0) nextImage(images);
-            else prevImage(images);
-        }
-    });
 }
 
 /* =========================
-   IMAGE NAVIGATION
-========================= */
-
-function nextImage(images) {
-
-    currentImageIndex =
-        (currentImageIndex + 1) % images.length;
-
-    openImageZoom(images[currentImageIndex]);
-}
-
-function prevImage(images) {
-
-    currentImageIndex =
-        (currentImageIndex - 1 + images.length) % images.length;
-
-    openImageZoom(images[currentImageIndex]);
-}
-
-/* =========================
-   TECH STACK
-========================= */
-
-function renderTech(project) {
-
-    const tech = document.getElementById("modalTechStack");
-    if (!tech) return;
-
-    tech.innerHTML = "";
-
-    (project.technologies || []).forEach(t => {
-        const span = document.createElement("span");
-        span.textContent = t;
-        tech.appendChild(span);
-    });
-}
-
-/* =========================
-   FEATURES
-========================= */
-
-function renderFeatures(project) {
-
-    const features = document.getElementById("modalFeatures");
-    if (!features) return;
-
-    features.innerHTML = "";
-
-    (project.features || []).forEach(f => {
-        const li = document.createElement("li");
-        li.textContent = f;
-        features.appendChild(li);
-    });
-}
-
-
-
-/* =========================
-   CLOSE MODAL
-========================= */
-
-function closeModal() {
-    const modalEl = document.getElementById("projectModal");
-    modalEl.classList.remove("show");
-}
-
-/* =========================
-   IMAGE ZOOM SYSTEM
-========================= */
-
-function initImageZoom() {
-
-    zoomOverlay = document.getElementById("imageZoom");
-    zoomImage = document.getElementById("zoomImage");
-
-    const closeBtn = document.getElementById("zoomCloseBtn");
-
-    closeBtn?.addEventListener("click", closeImageZoom);
-
-    zoomOverlay?.addEventListener("click", (e) => {
-        if (e.target === zoomOverlay) {
-            closeImageZoom();
-        }
-    });
-}
-
-/* OPEN ZOOM */
-function openImageZoom(src) {
-    if (!zoomOverlay || !zoomImage) return;
-
-    zoomImage.src = src;
-    zoomOverlay.classList.add("show");
-}
-
-/* CLOSE ZOOM */
-function closeImageZoom() {
-    if (!zoomOverlay || !zoomImage) return;
-
-    zoomOverlay.classList.remove("show");
-    zoomImage.src = "";
-}
-
-/* =========================
-   KEYBOARD CONTROLS
-========================= */
-
-function initKeyboardControls() {
-
-    document.addEventListener("keydown", (e) => {
-
-        const project = currentProjects[currentProjectIndex];
-        if (!project) return;
-
-        const images = project.images?.length
-            ? project.images
-            : [project.imageUrl];
-
-        switch (e.key) {
-
-            case "Escape":
-                closeModal();
-                closeImageZoom();
-                break;
-
-            case "ArrowRight":
-                nextProject();
-                break;
-
-            case "ArrowLeft":
-                prevProject();
-                break;
-
-            case "ArrowUp":
-                nextImage(images);
-                break;
-
-            case "ArrowDown":
-                prevImage(images);
-                break;
-        }
-    });
-}
-
-/* =========================
-   EVENTS
+   RESIZE HANDLER (optional)
 ========================= */
 
 window.addEventListener("resize", () => {
-
     if (!showingAllProjects) {
-        renderProjects();
+        renderCurrentProjects();
     }
-
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-
-    const closeBtn = document.getElementById("closeModalBtn");
-    const modalEl = document.getElementById("projectModal");
-
-    closeBtn?.addEventListener("click", closeModal);
-
-    modalEl?.addEventListener("click", (e) => {
-        if (e.target === modalEl) closeModal();
-    });
 });
