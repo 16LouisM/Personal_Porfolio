@@ -11,6 +11,13 @@ import {
    DOM ELEMENTS
 ========================= */
 
+const toggleBtn = document.getElementById("toggleCertificatesBtn");
+
+let allCertificates = [];
+let showingAll = false;
+
+const INITIAL_CERTIFICATES = 4;
+
 const container = document.getElementById("certificatesContainer");
 
 const modal = document.getElementById("certificateModal");
@@ -25,15 +32,16 @@ const closeModal = document.getElementById("closeCertificateModal");
 
 async function fetchCertificates() {
     try {
-        const q = query(collection(db, "certificates"), orderBy("order", "asc"));
+        const q = query(
+            collection(db, "certificates"),
+            orderBy("order", "asc")
+        );
+
         const snapshot = await getDocs(q);
 
-        container.innerHTML = "";
+        allCertificates = snapshot.docs.map(doc => doc.data());
 
-        snapshot.forEach((doc) => {
-            const cert = doc.data();
-            renderCertificate(cert);
-        });
+        renderCertificates();
 
     } catch (error) {
         console.error("Error fetching certificates:", error);
@@ -72,6 +80,32 @@ function renderCertificate(cert) {
     container.appendChild(card);
 }
 
+function renderCertificates() {
+
+    container.innerHTML = "";
+
+    const certificatesToShow = showingAll
+        ? allCertificates
+        : allCertificates.slice(0, INITIAL_CERTIFICATES);
+
+    certificatesToShow.forEach(renderCertificate);
+
+    if (allCertificates.length > INITIAL_CERTIFICATES) {
+
+        toggleBtn.hidden = false;
+
+        toggleBtn.textContent = showingAll
+            ? "Show Less"
+            : "View All Certificates";
+
+    } else {
+
+        toggleBtn.hidden = true;
+
+    }
+
+}
+
 /* =========================
    MODAL LOGIC
 ========================= */
@@ -102,6 +136,15 @@ window.addEventListener("click", (e) => {
     if (e.target === modal) {
         modal.classList.remove("show");
     }
+});
+
+
+toggleBtn.addEventListener("click", () => {
+
+    showingAll = !showingAll;
+
+    renderCertificates();
+
 });
 
 /* =========================

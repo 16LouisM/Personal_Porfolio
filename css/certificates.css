@@ -140,6 +140,13 @@
     gap: 10px;
 }
 
+.certificates-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 40px;
+}
+
 /* =========================
    RESPONSIVE – matches stats/skills
 ========================= */
