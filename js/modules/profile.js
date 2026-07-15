@@ -1,37 +1,15 @@
-import { app } from "../firebase-config.js";
+import { fetchProfile } from "../services/profileService.js";
+import { renderProfile } from "../ui/renderProfile.js";
 
-import {
-  getFirestore,
-  doc,
-  getDoc
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
-
-const db = getFirestore(app);
-
-export async function loadProfile() {
-
-  try {
-
-    const profileRef = doc(db, "siteInfo", "profile");
-    const profileSnap = await getDoc(profileRef);
-
-    if (!profileSnap.exists()) {
-      console.error("Profile document not found");
-      return;
+/**
+ * Initialize the profile section: load data and update the DOM.
+ */
+export async function initProfile() {
+    try {
+        const profile = await fetchProfile();
+        renderProfile(profile);
+    } catch (error) {
+        console.error("Failed to load profile:", error);
+        // Optionally show a fallback message in the UI
     }
-
-    const profile = profileSnap.data();
-
-    document.getElementById("profile-name").textContent =
-      profile.fullName || "Mashele Louis";
-
-    document.getElementById("profile-description").textContent =
-      profile.about || "";
-
-    document.getElementById("profile-image").src =
-      profile.profileImage || "";
-
-  } catch (error) {
-    console.error("Error loading profile:", error);
-  }
 }
