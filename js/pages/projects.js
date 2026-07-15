@@ -88,6 +88,17 @@ export async function initProjects() {
     }
 }
 
+function getInitialProjectCount() {
+
+    const width = window.innerWidth;
+
+    if (width >= 1200 && width < 1600) {
+        return 3;
+    }
+
+    return 4;
+}
+
 /* =========================
    CREATE PROJECT CARD
 ========================= */
@@ -151,9 +162,11 @@ function renderProjects() {
 
     projectsGrid.innerHTML = "";
 
+    const initialCount = getInitialProjectCount();
+
     const visibleProjects = showingAllProjects
         ? currentProjects
-        : currentProjects.slice(0, INITIAL_PROJECT_COUNT);
+        : currentProjects.slice(0, initialCount);
 
     visibleProjects.forEach((project, index) => {
 
@@ -166,7 +179,7 @@ function renderProjects() {
     });
 
     // Show button only if more than 4 projects
-    if (currentProjects.length > INITIAL_PROJECT_COUNT) {
+    if (currentProjects.length > getInitialProjectCount()) {
 
         toggleBtn.hidden = false;
 
@@ -421,6 +434,8 @@ function renderFeatures(project) {
     });
 }
 
+
+
 /* =========================
    CLOSE MODAL
 ========================= */
@@ -510,6 +525,14 @@ function initKeyboardControls() {
 /* =========================
    EVENTS
 ========================= */
+
+window.addEventListener("resize", () => {
+
+    if (!showingAllProjects) {
+        renderProjects();
+    }
+
+});
 
 document.addEventListener("DOMContentLoaded", () => {
 
