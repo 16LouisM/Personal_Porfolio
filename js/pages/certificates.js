@@ -27,11 +27,30 @@ const modalDesc = document.getElementById("modalCertificateDescription");
 const closeModal = document.getElementById("closeCertificateModal");
 
 /* =========================
+   RESPONSIVE CARD COUNT
+========================= */
+
+function getInitialCertificateCount() {
+
+    const width = window.innerWidth;
+
+    // 3-column desktop layout
+    if (width >= 1200 && width < 1600) {
+        return 3;
+    }
+
+    // All other layouts
+    return INITIAL_CERTIFICATES;
+}
+
+/* =========================
    FETCH CERTIFICATES
 ========================= */
 
 async function fetchCertificates() {
+
     try {
+
         const q = query(
             collection(db, "certificates"),
             orderBy("order", "asc")
@@ -44,9 +63,12 @@ async function fetchCertificates() {
         renderCertificates();
 
     } catch (error) {
+
         console.error("Error fetching certificates:", error);
+
         container.innerHTML = "<p>Failed to load certificates.</p>";
     }
+
 }
 
 /* =========================
@@ -54,7 +76,9 @@ async function fetchCertificates() {
 ========================= */
 
 function renderCertificate(cert) {
+
     const card = document.createElement("div");
+
     card.classList.add("certificate-card");
 
     card.innerHTML = `
@@ -78,19 +102,26 @@ function renderCertificate(cert) {
     });
 
     container.appendChild(card);
+
 }
+
+/* =========================
+   RENDER CERTIFICATES
+========================= */
 
 function renderCertificates() {
 
     container.innerHTML = "";
 
+    const initialCount = getInitialCertificateCount();
+
     const certificatesToShow = showingAll
         ? allCertificates
-        : allCertificates.slice(0, INITIAL_CERTIFICATES);
+        : allCertificates.slice(0, initialCount);
 
     certificatesToShow.forEach(renderCertificate);
 
-    if (allCertificates.length > INITIAL_CERTIFICATES) {
+    if (allCertificates.length > initialCount) {
 
         toggleBtn.hidden = false;
 
@@ -111,11 +142,11 @@ function renderCertificates() {
 ========================= */
 
 function openModal(cert) {
+
     modalImg.src = cert.imageURL;
     modalTitle.textContent = cert.title;
     modalDesc.textContent = cert.description;
 
-    // NEW: add issuer + date support
     const modalInfo = document.querySelector(".modal-info");
 
     modalInfo.innerHTML = `
@@ -126,6 +157,7 @@ function openModal(cert) {
     `;
 
     modal.classList.add("show");
+
 }
 
 closeModal.addEventListener("click", () => {
@@ -133,11 +165,16 @@ closeModal.addEventListener("click", () => {
 });
 
 window.addEventListener("click", (e) => {
+
     if (e.target === modal) {
         modal.classList.remove("show");
     }
+
 });
 
+/* =========================
+   TOGGLE BUTTON
+========================= */
 
 toggleBtn.addEventListener("click", () => {
 
@@ -148,9 +185,23 @@ toggleBtn.addEventListener("click", () => {
 });
 
 /* =========================
+   RESPONSIVE RESIZE
+========================= */
+
+window.addEventListener("resize", () => {
+
+    if (!showingAll) {
+        renderCertificates();
+    }
+
+});
+
+/* =========================
    INIT
 ========================= */
 
 export async function initCertificates() {
+
     await fetchCertificates();
+
 }
