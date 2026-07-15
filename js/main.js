@@ -1,7 +1,7 @@
 import { loadNavbar } from "./modules/navbar.js";
 import { initializeTheme } from "./modules/theme.js";
 import { initializeAnimations } from "./modules/animations.js";
-import { loadProfile } from "./modules/profile.js";
+import { initProfile } from "./modules/profile.js";
 import { initializeTyping } from "./modules/typing.js";
 import { initializeCounters } from "./modules/counter.js";
 
@@ -30,7 +30,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 
     // PROFILE
     try {
-        await loadProfile();
+        await initProfile();
     } catch (error) {
         console.error("Profile failed:", error);
     }
