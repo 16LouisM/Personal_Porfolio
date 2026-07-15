@@ -1,5 +1,5 @@
 /* =========================
-   DOM REFERENCES (cached)
+   DOM REFERENCES & SCROLL LOCK
 ========================= */
 
 let modal = null;
@@ -7,6 +7,24 @@ let zoomOverlay = null;
 let zoomImage = null;
 let galleryLockTimeout = null;
 let galleryLocked = false;
+
+// Scroll lock counter – prevents premature unlocking
+let scrollLockCount = 0;
+
+function lockScroll() {
+    if (scrollLockCount === 0) {
+        document.body.style.overflow = 'hidden';
+    }
+    scrollLockCount++;
+}
+
+function unlockScroll() {
+    scrollLockCount--;
+    if (scrollLockCount <= 0) {
+        scrollLockCount = 0;
+        document.body.style.overflow = '';
+    }
+}
 
 /* =========================
    INIT: Modal & Zoom
@@ -40,44 +58,46 @@ export function initZoom() {
 }
 
 /* =========================
-   MODAL VISIBILITY
+   MODAL VISIBILITY (with scroll lock)
 ========================= */
 
 export function showModal() {
-    if (modal) modal.classList.add("show");
+    if (modal) {
+        modal.classList.add("show");
+        lockScroll();  // lock page scroll
+    }
 }
 
 export function hideModal() {
-    if (modal) modal.classList.remove("show");
+    if (modal) {
+        modal.classList.remove("show");
+        unlockScroll();  // release scroll lock (if no other overlay is open)
+    }
+    // Optionally close zoom if it's still open – but zoom will close independently
 }
 
 /* =========================
-   ZOOM VISIBILITY
+   ZOOM VISIBILITY (with scroll lock)
 ========================= */
 
 export function openZoom(src) {
     if (!zoomOverlay || !zoomImage) return;
     zoomImage.src = src;
     zoomOverlay.classList.add("show");
+    lockScroll();  // additional lock (safe because counter tracks it)
 }
 
 export function closeZoom() {
     if (!zoomOverlay || !zoomImage) return;
     zoomOverlay.classList.remove("show");
     zoomImage.src = "";
+    unlockScroll();
 }
 
 /* =========================
    RENDER PROJECT CARDS
 ========================= */
 
-/**
- * Renders project cards into the specified container.
- * @param {Array} projects - Full array of project objects.
- * @param {string} containerId - ID of the grid container.
- * @param {number} limit - Number of projects to show; use -1 for all.
- * @param {Object} callbacks - { onDetailsClick(index) }
- */
 export function renderProjectGrid(projects, containerId, limit, callbacks) {
     const container = document.getElementById(containerId);
     if (!container) return;
@@ -95,9 +115,6 @@ export function renderProjectGrid(projects, containerId, limit, callbacks) {
     });
 }
 
-/**
- * Creates a single project card DOM element.
- */
 function createProjectCard(project, index, callbacks) {
     const card = document.createElement("article");
     card.className = "project-card";
@@ -137,20 +154,13 @@ function createProjectCard(project, index, callbacks) {
    RENDER MODAL CONTENT
 ========================= */
 
-/**
- * Populates the modal with project data and sets up gallery interactions.
- * @param {Object} project - The project object.
- * @param {Object} callbacks - { onImageClick(index), onSwipeNext(), onSwipePrev() }
- */
 export function renderModalContent(project, callbacks) {
     if (!modal) return;
 
-    // Set text fields
     setText("modalTitle", project.name);
     setText("modalSubtitle", project.subtitle);
     setText("modalDescription", project.description);
 
-    // Render gallery, tech, features
     renderGallery(project, callbacks);
     renderTech(project);
     renderFeatures(project);
@@ -179,7 +189,6 @@ function renderGallery(project, callbacks) {
     let moved = false;
     let pointerStartTime = 0;
 
-    // Reset gallery lock when re‑rendering
     galleryLocked = false;
     clearTimeout(galleryLockTimeout);
 
@@ -198,7 +207,6 @@ function renderGallery(project, callbacks) {
         img.loading = "lazy";
         img.style.cursor = "zoom-in";
 
-        // Pointer events for tap/click detection
         img.addEventListener("pointerdown", (e) => {
             moved = false;
             pointerStartTime = Date.now();
@@ -212,7 +220,6 @@ function renderGallery(project, callbacks) {
 
         img.addEventListener("click", (e) => {
             const duration = Date.now() - pointerStartTime;
-            // Block if moved or too long (likely a scroll/pan)
             if (moved || galleryLocked || duration > 250) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -226,11 +233,9 @@ function renderGallery(project, callbacks) {
         gallery.appendChild(img);
     });
 
-    // Lock gallery on scroll / wheel (prevents accidental zoom)
     gallery.addEventListener("scroll", lockGallery, { passive: true });
     gallery.addEventListener("wheel", lockGallery, { passive: true });
 
-    // Swipe detection on the gallery container
     gallery.addEventListener("pointerdown", (e) => {
         startX = e.clientX;
     });
