@@ -1,101 +1,73 @@
-import { db } from "../firebase-config.js";
-
-import {
-    doc,
-    getDoc,
-    collection,
-    addDoc,
-    serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+import { fetchContactInfo, sendMessageToFirestore } from "../services/contactService.js";
+import { renderContactInfo, showFeedback } from "../ui/renderContact.js";
 
 /* =========================
    INIT CONTACT SECTION
 ========================= */
 
+let isInitialized = false;
+
 export async function initContact() {
+    // Prevent double initialization
+    if (isInitialized) return;
+    isInitialized = true;
 
-    const docRef = doc(db, "contactInfo", "main");
-    const docSnap = await getDoc(docRef);
+    try {
+        const data = await fetchContactInfo();
+        renderContactInfo(data);
 
-    if (!docSnap.exists()) {
-        console.error("No contact data found in Firestore");
-        return;
-    }
-
-    const data = docSnap.data();
-
-    document.getElementById("contact-email").textContent =
-        data.email || "Not Available";
-
-    document.getElementById("contact-location").textContent =
-        data.location || "Not Available";
-
-    document.getElementById("email-card").href =
-        `mailto:${data.email}`;
-
-    document.getElementById("linkedin-card").href =
-        data.linkedin || "#";
-
-    document.getElementById("github-card").href =
-        data.github || "#";
-
-    const form = document.getElementById("contactForm");
-
-    if (form && !form.dataset.initialized) {
-
-        form.addEventListener("submit", sendMessage);
-
-        form.dataset.initialized = "true";
+        // Bind form submission once
+        const form = document.getElementById("contactForm");
+        if (form && !form.dataset.initialized) {
+            form.addEventListener("submit", handleFormSubmit);
+            form.dataset.initialized = "true";
+        }
+    } catch (error) {
+        console.error("Failed to load contact info:", error);
+        // Optionally show a fallback message in the UI
     }
 }
-async function sendMessage(event) {
 
+/* =========================
+   FORM HANDLER
+========================= */
+
+async function handleFormSubmit(event) {
     event.preventDefault();
 
-    const submitBtn =
-        document.querySelector(".contact-form button");
+    const form = event.target;
+    const submitBtn = form.querySelector(".contact-form button");
+    const nameInput = document.getElementById("name");
+    const emailInput = document.getElementById("email");
+    const messageInput = document.getElementById("message");
 
-    const name =
-        document.getElementById("name").value.trim();
-
-    const email =
-        document.getElementById("email").value.trim();
-
-    const message =
-        document.getElementById("message").value.trim();
+    const name = nameInput?.value.trim() || "";
+    const email = emailInput?.value.trim() || "";
+    const message = messageInput?.value.trim() || "";
 
     if (!name || !email || !message) {
-        alert("Please fill in all fields.");
+        showFeedback("Please fill in all fields.", "error");
         return;
     }
 
     try {
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Sending...";
+        }
 
-        submitBtn.disabled = true;
-        submitBtn.textContent = "Sending...";
+        await sendMessageToFirestore({ name, email, message });
 
-        await addDoc(collection(db, "messages"), {
-            name,
-            email,
-            message,
-            status: "unread",
-            createdAt: serverTimestamp()
-        });
-
-        alert("Message sent successfully!");
-
-        document.getElementById("contactForm").reset();
+        showFeedback("Message sent successfully!", "success");
+        form.reset();
 
     } catch (error) {
-
         console.error(error);
-
-        alert("Failed to send message.");
-
+        showFeedback("Failed to send message. Please try again.", "error");
     } finally {
-
-        submitBtn.disabled = false;
-        submitBtn.textContent = "Send Message";
-
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Send Message";
+        }
     }
 }
