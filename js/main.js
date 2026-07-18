@@ -10,65 +10,184 @@ import { initSkills } from "./pages/skills.js";
 import { initProjects } from "./pages/projects.js";
 import { initCertificates } from "./pages/certificates.js";
 import { initContact } from "./pages/contact.js";
+
+import { renderCVButton } from "./ui/renderCV.js";
+
+
 // ======================
 // INIT APP AFTER DOM READY
 // ======================
 
 window.addEventListener("DOMContentLoaded", async () => {
 
+
+    // ======================
     // UI INIT
+    // ======================
+
     initializeTheme();
     initializeAnimations();
     initializeTyping();
 
+
+
+    // ======================
     // NAVBAR
+    // ======================
+
     try {
+
         await loadNavbar();
+
     } catch (error) {
-        console.error("Navbar failed:", error);
+
+        console.error(
+            "Navbar failed:",
+            error
+        );
+
     }
 
+
+
+    // ======================
     // PROFILE
+    // ======================
+
     try {
+
         await initProfile();
+
     } catch (error) {
-        console.error("Profile failed:", error);
+
+        console.error(
+            "Profile failed:",
+            error
+        );
+
     }
 
+
+
+    // ======================
     // ABOUT
+    // ======================
+
     try {
+
         await initAboutPage();
+
     } catch (error) {
-        console.error("About failed:", error);
+
+        console.error(
+            "About failed:",
+            error
+        );
+
     }
 
-    // SKILLS (NOW SAFE)
+
+
+    // ======================
+    // SKILLS
+    // ======================
+
     try {
+
         await initSkills();
+
     } catch (error) {
-        console.error("Skills failed:", error);
+
+        console.error(
+            "Skills failed:",
+            error
+        );
+
     }
 
+
+
+    // ======================
     // CERTIFICATES
+    // ======================
+
     try {
+
         await initCertificates();
+
     } catch (error) {
-        console.error("Certificates failed:", error);
+
+        console.error(
+            "Certificates failed:",
+            error
+        );
+
     }
 
+
+
+    // ======================
     // PROJECTS
+    // ======================
+
     try {
+
         await initProjects();
+
     } catch (error) {
-        console.error("Projects failed:", error);
+
+        console.error(
+            "Projects failed:",
+            error
+        );
+
     }
 
+
+
+    // ======================
     // CONTACT
+    // ======================
+
     try {
+
         await initContact();
+
     } catch (error) {
-        console.error("Contact failed:", error);
+
+        console.error(
+            "Contact failed:",
+            error
+        );
+
     }
+
+
+
+    // ======================
+    // CV DOWNLOAD
+    // ======================
+
+    try {
+
+        renderCVButton();
+
+    } catch (error) {
+
+        console.error(
+            "CV failed:",
+            error
+        );
+
+    }
+
+
+
+    // ======================
     // COUNTERS
+    // ======================
+
     initializeCounters();
+
+
 });
