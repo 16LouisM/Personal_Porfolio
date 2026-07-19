@@ -1,0 +1,8 @@
+User-agent: *
+
+Allow: /
+
+
+Sitemap:
+
+https://personal-porfolio-six-theta.vercel.app/
