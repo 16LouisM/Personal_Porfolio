@@ -271,7 +271,12 @@ body {
 ========================= */
 @media (max-width: 480px) {
     .navbar {
-        padding: 14px 16px;
+        height: 60px;
+        padding: 0 16px;
+    }
+
+    body {
+        padding-top: 60px;
     }
 
     .logo a {
@@ -282,8 +287,8 @@ body {
         width: 280px;
         max-width: 82vw;
         right: -290px;
-        top: 105px;
-        height: calc(100vh - 105px);
+        top: 60px;
+        height: calc(100vh - 60px);
         padding: 1.2rem 1rem 1.5rem;
     }
 
